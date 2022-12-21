@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class CSVConverter:
     """Converts .csv to db"""
     def __init__(self, file_name):
