@@ -11,3 +11,8 @@ class CSVConverter:
         data = pd.read_csv(self.file_name, index_col=False, delimiter=',')
         data.head()
         return data
+
+    def get_csv_row(self, nrows):
+        data = pd.read_csv(self.file_name, index_col=False, delimiter=',', nrows=nrows)
+        data.head()
+        return data
