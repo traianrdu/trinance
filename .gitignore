@@ -1,2 +1,5 @@
 .env
 .idea
+static
+client/build
+client/node_modules
