@@ -9,8 +9,13 @@ Financial data analytics
 * Parse bank report and add it to db
     * server:
         * revolut & ing bank report parser (csv -> postgresql)
+        * data cleaning
+        * data api
+        * get verified data from client and save it to db
     * client:
         * create sidebar import/export option
+        * fetch data from the server (after cleaning)
+        * show data as table (save & reset options)
 * Graphs
     * server:
         * table view of expenses & income by month
