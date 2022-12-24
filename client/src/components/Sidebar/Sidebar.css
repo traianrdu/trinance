@@ -13,19 +13,20 @@
 }
 
 .Sidebar-button{
-    width: 100px;
-    vertical-align: middle;
-    padding: 10px 30px 10px 30px;
+    align-items: center;
+    width: 196px;
+    padding: 10px 18px 10px 18px;
     margin: 12px 12px 12px 12px;
-    line-height: 1.5;
-    border: 1px solid transparent;
-    border-radius: 0.25rem;
     background-color: #2966ff;
     color: white;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display: flex;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 24px;
     font-family: 'Times New Roman', serif;
+}
+
+.Sidebar-span{
+    padding-left: 10px;
 }
