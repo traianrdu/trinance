@@ -43,15 +43,15 @@ export default function Import() {
     }
 
     useEffect(() => {
-        response.method();
+        response.useAPI();
     }, []);
 
     return (
         <div className='import'>
             <h1>Import CSV</h1>
             <form onSubmit={afterSubmission}>
-                <input type="file" accept=".csv" onChange={handleFileChange}/>
-                <button onClick={response.method}>IMPORT CSV</button>
+                <input type="file" name="file" accept=".csv" onChange={handleFileChange}/>
+                <button onClick={response.useAPI}>IMPORT CSV</button>
             </form>
         </div>
     );
