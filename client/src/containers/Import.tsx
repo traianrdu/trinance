@@ -44,7 +44,7 @@ export default function Import() {
 
     useEffect(() => {
         response.useAPI();
-    }, []);
+    }, [response]);
 
     return (
         <div className='import'>
