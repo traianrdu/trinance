@@ -36,15 +36,11 @@ export default function Import() {
     const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test1', file);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!response.loading) {
-            console.log("abc");
-        }
-        console.log(response.status, response.statusText, response.data, response.error, response.loading);
     }
 
-    useEffect(() => {
-        response.useAPI();
-    }, [response]);
+    if (!response.loading) {
+        console.log(response.status, response.statusText, response.data, response.error, response.loading);
+    }
 
     return (
         <div className='import'>

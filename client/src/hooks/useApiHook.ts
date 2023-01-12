@@ -117,7 +117,7 @@ export function useUploadFileApiPost(url: string, file: any): Response {
         setLoading(true);
         if (file != null) {
             const fileData = new FormData();
-            fileData.append('file', file)
+            fileData.append('file', file);
             try {
                 const apiResponse = await fetch(url, {
                     method: 'POST',
@@ -132,8 +132,12 @@ export function useUploadFileApiPost(url: string, file: any): Response {
                 setError(error);
             }
         }
-        setLoading(false)
+        setLoading(false);
     };
+
+    useEffect(() => {
+        postAPIData();
+    }, []);
 
     return {status, statusText, data, error, loading, useAPI: postAPIData};
 }
