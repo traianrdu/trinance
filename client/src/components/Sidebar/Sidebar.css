@@ -1,0 +1,32 @@
+.Sidebar{
+    top: 0;
+    left: 0;
+    height: 100%;
+    min-width: 256px;
+    max-width: 256px;
+    margin: 0;
+    display: inline-block;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    background-color: #2966ff;
+}
+
+.Sidebar-button{
+    align-items: center;
+    width: 196px;
+    padding: 10px 18px 10px 18px;
+    margin: 12px 12px 12px 12px;
+    background-color: #2966ff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: 'Times New Roman', serif;
+}
+
+.Sidebar-span{
+    padding-left: 10px;
+}
