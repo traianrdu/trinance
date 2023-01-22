@@ -16,6 +16,7 @@ Financial data analytics
         * create sidebar import/export option
         * fetch data from the server (after cleaning)
         * show data as table (save & reset options)
+* Data tab (view all data in client)
 * Graphs
     * server:
         * table view of expenses & income by month
