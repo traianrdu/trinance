@@ -1,10 +1,10 @@
 # trinance
 Financial data analytics
 ### DONE:
-* create server
-    * add csv to postgresql
-* create client
-    * add sidebar in react + design
+* create server &check;
+    * add csv to postgresql &check;
+* create client &check;
+    * add sidebar in react + design &check;
 ### TO DO:
 * Parse bank report and add it to db
     * server:
