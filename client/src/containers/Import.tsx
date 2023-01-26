@@ -31,7 +31,7 @@ export default function Import() {
     const [importType, setImportType] = useState("");
 
     // This state will store the parsed data
-    const [parsedData, setParsedData] = useState([]);
+    const [parsedData, setParsedData] = useState<any[]>([]);
     //State to store table Column name
     const [tableRows, setTableRows] = useState([]);
     //State to store the values
@@ -46,24 +46,16 @@ export default function Import() {
                 complete: function (results) {
                     const rowsArray: any[] = [];
                     const valuesArray: any[] = [];
-
                     // Iterating data to get column name and their values
-                    results.data.map((d) => {
-                      // @ts-ignore
+                    results.data.map((d: any) => {
                         rowsArray.push(Object.keys(d));
-                      // @ts-ignore
                         valuesArray.push(Object.values(d));
                     });
-
                     // Parsed Data Response in array format
-                    // @ts-ignore
                     setParsedData(results.data);
-
                     // Filtered Column Names
                     setTableRows(rowsArray[0]);
-
                     // Filtered Values
-                    // @ts-ignore
                     setValues(valuesArray);
                 },
             });
