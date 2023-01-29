@@ -4,29 +4,6 @@ import RadioButton from "../components/RadioButton";
 import Papa, { ParseResult } from "papaparse";
 
 export default function Import() {
-
-    // example 1
-    /*const handleClick = async() => {
-        console.log("abc");
-        const data: ApiResponse = UseApiGet('http://192.168.0.66:5000/test1');
-        console.log(data.loading);
-    };*/
-
-    //const data: ApiResponse = UseApiGet('http://192.168.0.66:5000/test1');
-    //console.log(data)
-
-    // example 2
-    /*const [status, statusText, data, error, loading, getAPIData] = useApiGet('http://192.168.0.66:5000/test1');
-    const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        /*if (!loading) {
-            console.log(data)
-        } else {
-
-        }//end here * /
-        console.log(status, statusText, data, error, loading);
-    }*/
-
     const [file, setFile] = useState<File>();
     const [importType, setImportType] = useState("");
 
@@ -66,6 +43,22 @@ export default function Import() {
         setImportType(e.target.value);
     };
 
+    /**
+     *
+     * @param e event
+     * @param rowIndex row index
+     * @param columnIndex column index
+     */
+    const onChangeInput = (e: ChangeEvent<HTMLInputElement>, rowIndex: number, columnIndex: number) => {
+        const {value} = e.target
+
+        const editData = values.map((mValue, rIndex) =>
+            mValue.map((val:any, cIndex:any) =>
+                rIndex === rowIndex && cIndex === columnIndex ? value : val
+        ));
+        setValues(editData)
+    }
+
     const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test1', file);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -87,29 +80,30 @@ export default function Import() {
             </form>
 
             <br />
-      <br />
-      {/* Table */}
-      <table>
-        <thead>
-          <tr>
-            {tableRows.map((rows, index) => {
-              return <th key={index}>{rows}</th>;
-            })}
-          </tr>
-        </thead>
-
-        <tbody>
-          {values.map((value, index) => {
-              return (
-              <tr key={index}>
-                {value.map((val:any, i:any) => {
-                  return <td key={i}>{val}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            <br />
+            {/* Table */}
+            <table>
+                <thead>
+                    <tr>
+                        {tableRows.map((rows, index) => {
+                            return <th key={index}>{rows}</th>;
+                        })}
+                    </tr>
+                </thead>
+                <tbody>
+                    {values.map((value, rIndex) => {
+                        return (
+                            <tr key={rIndex}>
+                                {value.map((val:any, cIndex:any) => {
+                                    return <td key={cIndex}>
+                                        <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
+                                    </td>;
+                                })}
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </div>
     );
 }
