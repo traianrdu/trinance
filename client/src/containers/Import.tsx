@@ -74,9 +74,20 @@ export default function Import() {
         <div className='import'>
             <h1>Import CSV</h1>
             <form onSubmit={afterSubmission}>
-                <RadioButton id={"1"} changed={importTypeChangeHandler} value={"revolut"} isSelected={importType === "revolut"}>Revolut</RadioButton>
-                <RadioButton id={"2"} changed={importTypeChangeHandler} value={"ing"} isSelected={importType === "ing"}>ING</RadioButton>
-                <RadioButton id={"3"} changed={importTypeChangeHandler} value={"investment_report"} isSelected={importType === "investment_report"}>Investment report</RadioButton>
+                {/* Radio button init */}
+                <RadioButton id={"1"} changed={importTypeChangeHandler} value={"revolut"}
+                             isSelected={importType === "revolut"} isDisabled={!isImportFileDisabled}>
+                    Revolut
+                </RadioButton>
+                <RadioButton id={"2"} changed={importTypeChangeHandler} value={"ing"}
+                             isSelected={importType === "ing"} isDisabled={!isImportFileDisabled}>
+                    ING
+                </RadioButton>
+                <RadioButton id={"3"} changed={importTypeChangeHandler} value={"investment_report"}
+                             isSelected={importType === "investment_report"} isDisabled={!isImportFileDisabled}>
+                    Investment report
+                </RadioButton>
+
                 <input type="file" name="file" accept=".csv" onChange={handleFileChange} disabled={isImportFileDisabled}/>
                 <button onClick={response.useAPI}>IMPORT CSV</button>
             </form>
