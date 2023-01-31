@@ -6,6 +6,7 @@ import Papa, { ParseResult } from "papaparse";
 export default function Import() {
     const [file, setFile] = useState<File>();
     const [importType, setImportType] = useState("");
+    const [isImportFileDisabled, setIsImportFileDisabled] = useState(true);
 
     // This state will store the parsed data
     const [parsedData, setParsedData] = useState<any[]>([]);
@@ -41,6 +42,7 @@ export default function Import() {
 
     const importTypeChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setImportType(e.target.value);
+        setIsImportFileDisabled(false);
     };
 
     /**
@@ -75,7 +77,7 @@ export default function Import() {
                 <RadioButton id={"1"} changed={importTypeChangeHandler} value={"revolut"} isSelected={importType === "revolut"}>Revolut</RadioButton>
                 <RadioButton id={"2"} changed={importTypeChangeHandler} value={"ing"} isSelected={importType === "ing"}>ING</RadioButton>
                 <RadioButton id={"3"} changed={importTypeChangeHandler} value={"investment_report"} isSelected={importType === "investment_report"}>Investment report</RadioButton>
-                <input type="file" name="file" accept=".csv" onChange={handleFileChange}/>
+                <input type="file" name="file" accept=".csv" onChange={handleFileChange} disabled={isImportFileDisabled}/>
                 <button onClick={response.useAPI}>IMPORT CSV</button>
             </form>
 
