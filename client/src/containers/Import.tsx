@@ -1,17 +1,24 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import {useApiPost, Response, useUploadFileApiPost} from "../hooks/useApiHook";
+import React, {ChangeEvent, useState} from 'react';
+import {Response, useUploadFileApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
-import Papa, { ParseResult } from "papaparse";
+import Papa from "papaparse";
+import {filterRevolutCSV} from "../util/Revolut";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
     const [importType, setImportType] = useState("");
     const [isImportFileDisabled, setIsImportFileDisabled] = useState(true);
+    const [isSubmitClick, setIsSubmitClick] = useState(false);
 
+    // number of columns
+    const noOfColumns = 13;
+    // table title
+    const tableTitle = ["Timestamp", "Date", "Category", "Item", "Account", "Currency", "Amount",
+        "Merchant", "Country", "Info", "Amount_RON", "Amount_EUR", "Amount_USD"];
     // This state will store the parsed data
     const [parsedData, setParsedData] = useState<any[]>([]);
     //State to store table Column name
-    const [tableRows, setTableRows] = useState([]);
+    const [tableRows, setTableRows] = useState<any[]>([]);
     //State to store the values
     const [values, setValues] = useState<any[]>([]);
 
@@ -27,19 +34,31 @@ export default function Import() {
                     // Iterating data to get column name and their values
                     results.data.map((d: any) => {
                         rowsArray.push(Object.keys(d));
-                        valuesArray.push(Object.values(d));
+                        if (importType === "revolut") {
+                            let filteredData = filterRevolutCSV(Object.values(d));
+                            valuesArray.push(filteredData);
+                        } else {
+                            valuesArray.push(Object.values(d));
+                        }
                     });
                     // Parsed Data Response in array format
                     setParsedData(results.data);
                     // Filtered Column Names
-                    setTableRows(rowsArray[0]);
+                    // setTableRows(rowsArray[0]);
                     // Filtered Values
                     setValues(valuesArray);
+
+                    // Add table title
+                    setTableRows(tableTitle);
                 },
             });
         }
     };
 
+    /**
+     * Handle import type (disables radio btn).
+     * @param e event
+     */
     const importTypeChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setImportType(e.target.value);
         setIsImportFileDisabled(false);
@@ -66,8 +85,16 @@ export default function Import() {
         e.preventDefault();
     }
 
-    if (!response.loading) {
-        console.log(response.status, response.statusText, response.data, response.error, response.loading);
+    const submitClick = () => {
+        setIsSubmitClick(true);
+        response.useAPI();
+    }
+
+    if (isSubmitClick) {
+        if (!response.loading) {
+            setIsSubmitClick(false);
+            console.log(response.status, response.statusText, response.data, response.error, response.loading);
+        }
     }
 
     return (
@@ -89,7 +116,7 @@ export default function Import() {
                 </RadioButton>
 
                 <input type="file" name="file" accept=".csv" onChange={handleFileChange} disabled={isImportFileDisabled}/>
-                <button onClick={response.useAPI}>IMPORT CSV</button>
+                <button onClick={submitClick}>IMPORT CSV</button>
             </form>
 
             <br />
@@ -104,17 +131,20 @@ export default function Import() {
                     </tr>
                 </thead>
                 <tbody>
-                    {values.map((value, rIndex) => {
-                        return (
-                            <tr key={rIndex}>
-                                {value.map((val:any, cIndex:any) => {
-                                    return <td key={cIndex}>
-                                        <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
-                                    </td>;
-                                })}
-                            </tr>
-                        );
-                    })}
+                    {
+                        values.map((value, rIndex) => {
+                            return (
+                                <tr key={rIndex}>
+                                    {value.map((val:any, cIndex:any) => {
+                                        return <td key={cIndex}>
+                                            <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
+                                        </td>;
+                                    })}
+                                </tr>
+                            );
+                        })
+
+                    }
                 </tbody>
             </table>
         </div>
