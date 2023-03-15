@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from 'react';
 import {Response, useUploadFileApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
-import {filterRevolutCSV} from "../util/Revolut";
+import {RevolutManager} from "../util/RevolutManager";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -35,8 +35,8 @@ export default function Import() {
                     results.data.map((d: any) => {
                         rowsArray.push(Object.keys(d));
                         if (importType === "revolut") {
-                            let filteredData = filterRevolutCSV(Object.values(d));
-                            valuesArray.push(filteredData);
+                            let revolutManager = new RevolutManager(Object.values(d)).getRevolutManagerObject();
+                            valuesArray.push(revolutManager);
                         } else {
                             valuesArray.push(Object.values(d));
                         }
