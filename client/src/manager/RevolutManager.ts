@@ -1,5 +1,5 @@
-import {DateFormat, dateFormatter} from "./DateUtils";
-import {ReportManager} from "../manager/ReportManager"
+import {DateFormat, dateFormatter} from "../util/DateUtils";
+import {ReportManager} from "./ReportManager";
 
 export class RevolutManager extends ReportManager{
 
@@ -45,10 +45,16 @@ export class RevolutManager extends ReportManager{
      * Creates table data object.
      * @return string[]
      */
-    getRevolutManagerObject(): string[]{
+    getRevolutManagerObject(): string[] {
         let object = [];
         object.push(this.timestamp, this.date, this.category, this.item, this.account, this.currency, this.amount,
             this.merchant, this.country, this.info, this.amountRON, this.amountEUR, this.amountUSD);
+        return object;
+    }
+
+    getRevolutManager(): this[] {
+        let object = [];
+        object.push(this);
         return object;
     }
 }

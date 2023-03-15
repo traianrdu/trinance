@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from 'react';
 import {Response, useUploadFileApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
-import {RevolutManager} from "../util/RevolutManager";
+import {RevolutManager} from "../manager/RevolutManager";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -135,7 +135,7 @@ export default function Import() {
                         values.map((value, rIndex) => {
                             return (
                                 <tr key={rIndex}>
-                                    {value.map((val:any, cIndex:any) => {
+                                    {value.map((val: any, cIndex: any) => {
                                         return <td key={cIndex}>
                                             <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
                                         </td>;
