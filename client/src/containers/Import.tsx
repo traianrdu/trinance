@@ -3,6 +3,7 @@ import {Response, useUploadFileApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
 import {RevolutManager} from "../manager/RevolutManager";
+import {Category} from "../enum/Category";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -80,6 +81,16 @@ export default function Import() {
         setValues(editData)
     }
 
+    const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowIndex: number, columnIndex: number) => {
+        const {value} = event.target
+
+        const editData = values.map((mValue, rIndex) =>
+            mValue.map((val:any, cIndex:any) =>
+                rIndex === rowIndex && cIndex === columnIndex ? value : val
+        ));
+        setValues(editData)
+    };
+
     const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test1', file);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -135,10 +146,44 @@ export default function Import() {
                         values.map((value, rIndex) => {
                             return (
                                 <tr key={rIndex}>
-                                    {value.map((val: any, cIndex: any) => {
-                                        return <td key={cIndex}>
-                                            <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
-                                        </td>;
+                                    {value.map((val: any, cIndex:any) => {
+                                        /*return (
+                                            <React.Fragment>
+                                                <td key={0}>
+                                                    <input value={val.timestamp} type="text" onChange={(e) => onChangeInput(e, rIndex, 0)}/>
+                                                </td>
+                                                <td key={1}>
+                                                    <input value={val.date} type="text" onChange={(e) => onChangeInput(e, rIndex, 1)}/>
+                                                </td>
+                                                <td>
+                                                    <select>
+                                                        <option value={1}>1</option>
+                                                    </select>
+                                                </td>
+                                            </React.Fragment>
+                                        );*/
+                                        if(cIndex === 2) {
+                                            return (
+                                                <td key={cIndex}>
+                                                    <select value={val} onChange={(e) => onSelectChange(e, rIndex, cIndex)}>
+                                                        {Object.keys(Category).map((key: any) => {
+                                                            let isValueProperty = Number(key) >= 0
+                                                            if (isValueProperty) {
+                                                                return (
+                                                                    <option key={key} value={key}>
+                                                                        {Category[key]}
+                                                                    </option>)
+                                                            }
+                                                        })}
+                                                    </select>
+                                                </td>
+                                            );
+                                        }
+                                        return (
+                                            <td key={cIndex}>
+                                                <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
+                                            </td>
+                                        );
                                     })}
                                 </tr>
                             );

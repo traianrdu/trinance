@@ -1,0 +1,22 @@
+export enum Category{
+    salary,
+    freelancing,
+    extra,
+    naturalPerson,
+    home,
+    fuel,
+    utilities,
+    groceries,
+    subscriptions,
+    phone,
+    donations,
+    sport,
+    shopping,
+    entertainment,
+    holiday,
+    gifts,
+    restaurant,
+    friends,
+    parking,
+    miscellaneous
+}
