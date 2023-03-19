@@ -11,8 +11,6 @@ export default function Import() {
     const [isImportFileDisabled, setIsImportFileDisabled] = useState(true);
     const [isSubmitClick, setIsSubmitClick] = useState(false);
 
-    // number of columns
-    const noOfColumns = 13;
     // table title
     const tableTitle = ["Timestamp", "Date", "Category", "Item", "Account", "Currency", "Amount",
         "Merchant", "Country", "Info", "Amount_RON", "Amount_EUR", "Amount_USD"];
@@ -158,7 +156,7 @@ export default function Import() {
                             return (
                                 <tr key={rIndex}>
                                     {value.map((val: any, cIndex:any) => {
-                                        if(cIndex === 2) {
+                                        if(cIndex === 2 && importType === "revolut") {
                                             return (
                                                 <td key={cIndex}>
                                                     <select value={val} onChange={(e) => onSelectChange(e, rIndex, cIndex)}>
