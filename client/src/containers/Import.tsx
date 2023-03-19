@@ -1,9 +1,10 @@
 import React, {ChangeEvent, useState} from 'react';
-import {Response, useUploadFileApiPost} from "../hooks/useApiHook";
+import {Response, useUploadFormApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
 import {RevolutManager} from "../manager/RevolutManager";
 import {Category} from "../enum/Category";
+import {ReportManager} from "../manager/ReportManager";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -20,6 +21,8 @@ export default function Import() {
     const [tableRows, setTableRows] = useState<any[]>([]);
     //State to store the values
     const [values, setValues] = useState<any[]>([]);
+    //State to store final sending values
+    const [sendValues, setSendValues] = useState<any[]>([]);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -34,9 +37,12 @@ export default function Import() {
                     results.data.map((d: any) => {
                         rowsArray.push(Object.keys(d));
                         if (importType === "revolut") {
-                            let revolutManager = new RevolutManager(Object.values(d)).getRevolutManagerObject();
+                            let revolutManager = new RevolutManager(Object.values(d)).getReportManagerObject();
                             valuesArray.push(revolutManager);
-                        } else {
+                        } else if (importType === "ing") {
+                            valuesArray.push(Object.values(d));
+                        } else if (importType === "investment_report") {
+                            //let reportManager = new ReportManager(Object.values(d)).getReportManagerObject();
                             valuesArray.push(Object.values(d));
                         }
                     });
@@ -95,7 +101,7 @@ export default function Import() {
         setValues(editData)
     };
 
-    const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test2', values);
+    const response: Response  = useUploadFormApiPost('http://192.168.0.66:5000/test2', sendValues);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     }
@@ -104,6 +110,7 @@ export default function Import() {
      * Call API only on submit btn click.
      */
     const submitClick = () => {
+        setSendValues(values);
         setIsSubmitClick(true);
         response.useAPI();
     }

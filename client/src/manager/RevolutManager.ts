@@ -41,21 +41,4 @@ export class RevolutManager extends ReportManager{
         }
         return amount;
     }
-
-    /**
-     * Creates table data object.
-     * @return string[]
-     */
-    getRevolutManagerObject(): string[] {
-        let object = [];
-        object.push(this.timestamp, this.date, this.category, this.item, this.account, this.currency, this.amount,
-            this.merchant, this.country, this.info, this.amountRON, this.amountEUR, this.amountUSD);
-        return object;
-    }
-
-    getRevolutManager(): this[] {
-        let object = [];
-        object.push(this);
-        return object;
-    }
 }

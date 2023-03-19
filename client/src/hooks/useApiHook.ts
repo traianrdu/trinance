@@ -141,3 +141,42 @@ export function useUploadFileApiPost(url: string, file: any): Response {
 
     return {status, statusText, data, error, loading, useAPI: postAPIData};
 }
+
+// form upload post request
+export function useUploadFormApiPost(url: string, form: any): Response {
+    const [status, setStatus] = useState<Number>(0);
+    const [statusText, setStatusText] = useState<String>('');
+    const [data, setData] = useState<any>();
+    const [error, setError] = useState<any>();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const postAPIData = async () => {
+        setLoading(true);
+        if (form != null) {
+            if (form.length !== 0) {
+                const formData = new FormData();
+                formData.append('formData', form);
+                try {
+                    const apiResponse = await fetch(url, {
+                        method: 'POST',
+                        //headers: {'Content-Type':'application/json'},
+                        body: formData
+                    });
+                    const json = await apiResponse.json();
+                    setStatus(apiResponse.status);
+                    setStatusText(apiResponse.statusText);
+                    setData(json);
+                } catch (error) {
+                    setError(error);
+                }
+            }
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        postAPIData();
+    }, []);
+
+    return {status, statusText, data, error, loading, useAPI: postAPIData};
+}

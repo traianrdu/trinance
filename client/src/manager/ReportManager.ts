@@ -32,27 +32,14 @@ export class ReportManager {
     }
 
     /**
-     * Returns object based on column index;
-     * @param index
-     * @return string value
+     * Creates table data object.
+     * @return string[]
      */
-    getObjectValue(index: number): string {
-        switch (index) {
-            case 0: return this.timestamp;
-            case 1: return this.date;
-            case 2: return this.category;
-            case 3: return this.item;
-            case 4: return this.account;
-            case 5: return this.currency;
-            case 6: return this.amount;
-            case 7: return this.merchant;
-            case 8: return this.country;
-            case 9: return this.info;
-            case 10: return this.amountRON;
-            case 11: return this.amountEUR;
-            case 12: return this.amountUSD;
-            default: return "";
-        }
+    getReportManagerObject(): string[] {
+        let object = [];
+        object.push(this.timestamp, this.date, this.category, this.item, this.account, this.currency, this.amount,
+            this.merchant, this.country, this.info, this.amountRON, this.amountEUR, this.amountUSD);
+        return object;
     }
 
     get timestamp(): string {

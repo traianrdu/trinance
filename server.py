@@ -28,7 +28,7 @@ def test1():
 def test2():
     if request.method == 'POST':
         try:
-            file = request.form['file']
+            file = request.form['formData']
             print(file)
         except Exception as e:
             print(f"Couldn't read data {e}")
