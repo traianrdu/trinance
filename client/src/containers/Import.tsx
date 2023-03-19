@@ -4,7 +4,7 @@ import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
 import {RevolutManager} from "../manager/RevolutManager";
 import {Category} from "../enum/Category";
-import {ReportManager} from "../manager/ReportManager";
+import {InvestmentManager} from "../manager/InvestmentManager";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -42,8 +42,8 @@ export default function Import() {
                         } else if (importType === "ing") {
                             valuesArray.push(Object.values(d));
                         } else if (importType === "investment_report") {
-                            //let reportManager = new ReportManager(Object.values(d)).getReportManagerObject();
-                            valuesArray.push(Object.values(d));
+                            let investmentManager = new InvestmentManager(Object.values(d)).getReportManagerObject();
+                            valuesArray.push(investmentManager);
                         }
                     });
                     // Parsed Data Response in array format
@@ -162,7 +162,7 @@ export default function Import() {
                             return (
                                 <tr key={rIndex}>
                                     {value.map((val: any, cIndex:any) => {
-                                        if(cIndex === 2 && importType === "revolut") {
+                                        if(cIndex === 2 && (importType === "revolut" || importType === "investment_report")) {
                                             return (
                                                 <td key={cIndex}>
                                                     <select value={val} onChange={(e) => onSelectChange(e, rIndex, cIndex)}>
