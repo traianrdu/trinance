@@ -70,7 +70,7 @@ export default function Import() {
      * @param columnIndex column index
      */
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>, rowIndex: number, columnIndex: number) => {
-        const {value} = e.target
+        const {value} = e.target;
 
         const editData = values.map((mValue, rIndex) =>
             mValue.map((val:any, cIndex:any) =>
@@ -79,7 +79,6 @@ export default function Import() {
         setValues(editData)
     }
 
-
     /**
      * Handle change data from table select element.
      * @param event event
@@ -87,7 +86,7 @@ export default function Import() {
      * @param columnIndex column index
      */
     const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowIndex: number, columnIndex: number) => {
-        const {value} = event.target
+        const {value} = event.target;
 
         const editData = values.map((mValue, rIndex) =>
             mValue.map((val:any, cIndex:any) =>
@@ -96,7 +95,7 @@ export default function Import() {
         setValues(editData)
     };
 
-    const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test1', file);
+    const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test2', values);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     }

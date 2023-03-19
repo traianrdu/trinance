@@ -2,7 +2,7 @@ export enum Category{
     salary,
     freelancing,
     extra,
-    naturalPerson,
+    person,
     home,
     fuel,
     utilities,
