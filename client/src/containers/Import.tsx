@@ -66,7 +66,7 @@ export default function Import() {
     };
 
     /**
-     *
+     * Handle change data from table input element.
      * @param e event
      * @param rowIndex row index
      * @param columnIndex column index
@@ -81,6 +81,13 @@ export default function Import() {
         setValues(editData)
     }
 
+
+    /**
+     * Handle change data from table select element.
+     * @param event event
+     * @param rowIndex row index
+     * @param columnIndex column index
+     */
     const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowIndex: number, columnIndex: number) => {
         const {value} = event.target
 
@@ -96,11 +103,15 @@ export default function Import() {
         e.preventDefault();
     }
 
+    /**
+     * Call API only on submit btn click.
+     */
     const submitClick = () => {
         setIsSubmitClick(true);
         response.useAPI();
     }
 
+    // api call result only when submit button is clicked
     if (isSubmitClick) {
         if (!response.loading) {
             setIsSubmitClick(false);
@@ -147,21 +158,6 @@ export default function Import() {
                             return (
                                 <tr key={rIndex}>
                                     {value.map((val: any, cIndex:any) => {
-                                        /*return (
-                                            <React.Fragment>
-                                                <td key={0}>
-                                                    <input value={val.timestamp} type="text" onChange={(e) => onChangeInput(e, rIndex, 0)}/>
-                                                </td>
-                                                <td key={1}>
-                                                    <input value={val.date} type="text" onChange={(e) => onChangeInput(e, rIndex, 1)}/>
-                                                </td>
-                                                <td>
-                                                    <select>
-                                                        <option value={1}>1</option>
-                                                    </select>
-                                                </td>
-                                            </React.Fragment>
-                                        );*/
                                         if(cIndex === 2) {
                                             return (
                                                 <td key={cIndex}>

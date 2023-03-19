@@ -18,7 +18,7 @@ Financial data analytics
         * create sidebar import option &check;
         * create sidebar export option
         * show data as table &check;
-        * parse revolut into table
+        * parse revolut into table &check;
         * parse ing into table
         * view mode, edit, save or reset options
         * buttons design
