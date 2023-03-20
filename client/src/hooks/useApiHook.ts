@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import {Status} from "../enum/Status";
 
 // initial EX
 export type ApiResponse = {
@@ -14,7 +15,7 @@ export type Response = {
     statusText: String;
     data: any;
     error: any;
-    loading: Boolean;
+    loading: any;
     useAPI: any;
 };
 
@@ -148,10 +149,10 @@ export function useUploadFormApiPost(url: string, form: any): Response {
     const [statusText, setStatusText] = useState<String>('');
     const [data, setData] = useState<any>();
     const [error, setError] = useState<any>();
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<string>(Status[Status.init]);
 
     const postAPIData = async () => {
-        setLoading(true);
+        setLoading(Status[Status.loading]);
         if (form != null) {
             if (form.length !== 0) {
                 const formData = new FormData();
@@ -171,12 +172,8 @@ export function useUploadFormApiPost(url: string, form: any): Response {
                 }
             }
         }
-        setLoading(false);
+        setLoading(Status[Status.loaded]);
     };
-
-    useEffect(() => {
-        postAPIData();
-    }, []);
 
     return {status, statusText, data, error, loading, useAPI: postAPIData};
 }

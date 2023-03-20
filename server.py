@@ -7,7 +7,7 @@ cors = CORS(app, resources={r'/*': {"origins": '*'}})
 app.config["DEBUG"] = True
 
 
-# request file
+# request file test
 @app.route("/test1", methods=['GET', 'POST', 'OPTIONS'])
 def test1():
     if request.method == 'POST':
@@ -23,7 +23,7 @@ def test1():
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
 
 
-# request form data
+# request form data test
 @app.route("/test2", methods=['GET', 'POST', 'OPTIONS'])
 def test2():
     if request.method == 'POST':

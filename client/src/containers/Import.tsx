@@ -1,10 +1,11 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {Response, useUploadFormApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
 import {RevolutManager} from "../manager/RevolutManager";
 import {Category} from "../enum/Category";
 import {InvestmentManager} from "../manager/InvestmentManager";
+import {Status} from "../enum/Status";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -112,16 +113,22 @@ export default function Import() {
     const submitClick = () => {
         setSendValues(values);
         setIsSubmitClick(true);
-        response.useAPI();
     }
 
-    // api call result only when submit button is clicked
-    if (isSubmitClick) {
-        if (!response.loading) {
+    useEffect(() => {
+        if (isSubmitClick) {
             setIsSubmitClick(false);
+            response.loading = Status[Status.init];  // reset response
+            response.useAPI();
+        }
+
+        // api response
+        if (response.loading === Status[Status.loaded]) {
+            response.loading = Status[Status.init];
             console.log(response.status, response.statusText, response.data, response.error, response.loading);
         }
-    }
+
+    }, [isSubmitClick, response]);
 
     return (
         <div className='import'>
