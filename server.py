@@ -1,3 +1,6 @@
+import json
+from ast import literal_eval
+
 from flask import Flask, request, make_response, current_app
 from flask_cors import CORS
 from io import BytesIO
@@ -28,8 +31,43 @@ def test1():
 def test2():
     if request.method == 'POST':
         try:
-            file = request.form['formData']
-            print(file)
+            #file = request.form['formData']
+            #print(file.json)
+            #print(file[2])
+            """
+            print(request.data)
+            parsedata = request.data.decode('utf8')
+            data = json.loads(parsedata)
+            s = json.dumps(data, indent=4, sort_keys=True)
+            print(s)
+            """
+            """
+            data = literal_eval(request.data.decode('utf8'))
+            print(data)
+            print('- ' * 20)
+
+            s = json.dumps(data, indent=4, sort_keys=True)
+            print(s)
+            """
+            # get json data as string
+            data = request.get_json()
+            # load string as json
+            data_json = json.loads(data)
+            print(type(data_json))
+            print(data_json)
+            # read items from dict
+            for i in data_json['items']:
+                print(i)
+            #json_object = request.json.items
+            #print(json_object)
+
+            #json_parser = json.load(json_object)
+            """print(json_object['items'])
+            for i in json_object['items']:
+                print(i)
+                print("---------------")"""
+            #print(request.json)
+            #print(json.dumps(file))
         except Exception as e:
             print(f"Couldn't read data {e}")
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
