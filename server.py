@@ -1,3 +1,6 @@
+import json
+from ast import literal_eval
+
 from flask import Flask, request, make_response, current_app
 from flask_cors import CORS
 from io import BytesIO
@@ -7,6 +10,7 @@ cors = CORS(app, resources={r'/*': {"origins": '*'}})
 app.config["DEBUG"] = True
 
 
+# request file test
 @app.route("/test1", methods=['GET', 'POST', 'OPTIONS'])
 def test1():
     if request.method == 'POST':
@@ -19,6 +23,49 @@ def test1():
             print(file_content)
         except Exception as e:
             print(f"Couldn't upload file {e}")
+    return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
+
+
+# request form data test
+@app.route("/test2", methods=['GET', 'POST', 'OPTIONS'])
+def test2():
+    if request.method == 'POST':
+        try:
+            # get json data as string
+            data = request.get_json()
+            # load string as json
+            data_json = json.loads(data)
+            # read items from dict
+            for item in data_json['items']:
+                print(item)
+                timestamp = item['timestamp']
+                date = item['date']
+                category = item['category']
+                bought_item = item['item']
+                account = item['account']
+                currency = item['currency']
+                amount = item['amount']
+                merchant = item['merchant']
+                country = item['country']
+                info = item['info']
+                amount_ron = item['amountRON']
+                amount_eur = item['amountEUR']
+                amount_usd = item['amountUSD']
+                print(timestamp)
+                print(date)
+                print(category)
+                print(bought_item)
+                print(account)
+                print(currency)
+                print(amount)
+                print(merchant)
+                print(country)
+                print(info)
+                print(amount_ron)
+                print(amount_eur)
+                print(amount_usd)
+        except Exception as e:
+            print(f"Couldn't read data {e}")
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
 
 

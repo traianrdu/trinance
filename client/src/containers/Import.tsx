@@ -1,18 +1,29 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {useApiPost, Response, useUploadFileApiPost} from "../hooks/useApiHook";
+import {Response, useUploadFormApiPost} from "../hooks/useApiHook";
 import RadioButton from "../components/RadioButton";
-import Papa, { ParseResult } from "papaparse";
+import Papa from "papaparse";
+import {RevolutManager} from "../manager/RevolutManager";
+import {Category} from "../enum/Category";
+import {InvestmentManager} from "../manager/InvestmentManager";
+import {Status} from "../enum/Status";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
     const [importType, setImportType] = useState("");
+    const [isImportFileDisabled, setIsImportFileDisabled] = useState(true);
+    const [isSubmitClick, setIsSubmitClick] = useState(false);
 
+    // table title
+    const tableTitle = ["Timestamp", "Date", "Category", "Item", "Account", "Currency", "Amount",
+        "Merchant", "Country", "Info", "Amount_RON", "Amount_EUR", "Amount_USD"];
     // This state will store the parsed data
     const [parsedData, setParsedData] = useState<any[]>([]);
     //State to store table Column name
-    const [tableRows, setTableRows] = useState([]);
+    const [tableRows, setTableRows] = useState<any[]>([]);
     //State to store the values
     const [values, setValues] = useState<any[]>([]);
+    //State to store final sending values
+    const [sendValues, setSendValues] = useState<any[]>([]);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -26,31 +37,47 @@ export default function Import() {
                     // Iterating data to get column name and their values
                     results.data.map((d: any) => {
                         rowsArray.push(Object.keys(d));
-                        valuesArray.push(Object.values(d));
+                        if (importType === "revolut") {
+                            let revolutManager = new RevolutManager(Object.values(d)).getReportManagerObject();
+                            valuesArray.push(revolutManager);
+                        } else if (importType === "ing") {
+                            valuesArray.push(Object.values(d));
+                        } else if (importType === "investment_report") {
+                            let investmentManager = new InvestmentManager(Object.values(d)).getReportManagerObject();
+                            valuesArray.push(investmentManager);
+                        }
                     });
                     // Parsed Data Response in array format
                     setParsedData(results.data);
                     // Filtered Column Names
-                    setTableRows(rowsArray[0]);
+                    // setTableRows(rowsArray[0]);
                     // Filtered Values
                     setValues(valuesArray);
+
+                    // Add table title
+                    setTableRows(tableTitle);
                 },
             });
         }
     };
 
+    /**
+     * Handle import type (disables radio btn).
+     * @param e event
+     */
     const importTypeChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setImportType(e.target.value);
+        setIsImportFileDisabled(false);
     };
 
     /**
-     *
+     * Handle change data from table input element.
      * @param e event
      * @param rowIndex row index
      * @param columnIndex column index
      */
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>, rowIndex: number, columnIndex: number) => {
-        const {value} = e.target
+        const {value} = e.target;
 
         const editData = values.map((mValue, rIndex) =>
             mValue.map((val:any, cIndex:any) =>
@@ -59,24 +86,70 @@ export default function Import() {
         setValues(editData)
     }
 
-    const response: Response  = useUploadFileApiPost('http://192.168.0.66:5000/test1', file);
+    /**
+     * Handle change data from table select element.
+     * @param event event
+     * @param rowIndex row index
+     * @param columnIndex column index
+     */
+    const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowIndex: number, columnIndex: number) => {
+        const {value} = event.target;
+
+        const editData = values.map((mValue, rIndex) =>
+            mValue.map((val:any, cIndex:any) =>
+                rIndex === rowIndex && cIndex === columnIndex ? value : val
+        ));
+        setValues(editData)
+    };
+
+    const response: Response  = useUploadFormApiPost('http://192.168.0.66:5000/test2', sendValues);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     }
 
-    if (!response.loading) {
-        console.log(response.status, response.statusText, response.data, response.error, response.loading);
+    /**
+     * Call API only on submit btn click.
+     */
+    const submitClick = () => {
+        setSendValues(values);
+        setIsSubmitClick(true);
     }
+
+    useEffect(() => {
+        if (isSubmitClick) {
+            setIsSubmitClick(false);
+            response.loading = Status[Status.init];  // reset response
+            response.useAPI();
+        }
+
+        // api response
+        if (response.loading === Status[Status.loaded]) {
+            response.loading = Status[Status.init];
+            console.log(response.status, response.statusText, response.data, response.error, response.loading);
+        }
+
+    }, [isSubmitClick, response]);
 
     return (
         <div className='import'>
             <h1>Import CSV</h1>
             <form onSubmit={afterSubmission}>
-                <RadioButton id={"1"} changed={importTypeChangeHandler} value={"revolut"} isSelected={importType === "revolut"}>Revolut</RadioButton>
-                <RadioButton id={"2"} changed={importTypeChangeHandler} value={"ing"} isSelected={importType === "ing"}>ING</RadioButton>
-                <RadioButton id={"3"} changed={importTypeChangeHandler} value={"investment_report"} isSelected={importType === "investment_report"}>Investment report</RadioButton>
-                <input type="file" name="file" accept=".csv" onChange={handleFileChange}/>
-                <button onClick={response.useAPI}>IMPORT CSV</button>
+                {/* Radio button init */}
+                <RadioButton id={"1"} changed={importTypeChangeHandler} value={"revolut"}
+                             isSelected={importType === "revolut"} isDisabled={!isImportFileDisabled}>
+                    Revolut
+                </RadioButton>
+                <RadioButton id={"2"} changed={importTypeChangeHandler} value={"ing"}
+                             isSelected={importType === "ing"} isDisabled={!isImportFileDisabled}>
+                    ING
+                </RadioButton>
+                <RadioButton id={"3"} changed={importTypeChangeHandler} value={"investment_report"}
+                             isSelected={importType === "investment_report"} isDisabled={!isImportFileDisabled}>
+                    Investment report
+                </RadioButton>
+
+                <input type="file" name="file" accept=".csv" onChange={handleFileChange} disabled={isImportFileDisabled}/>
+                <button onClick={submitClick}>IMPORT CSV</button>
             </form>
 
             <br />
@@ -91,17 +164,39 @@ export default function Import() {
                     </tr>
                 </thead>
                 <tbody>
-                    {values.map((value, rIndex) => {
-                        return (
-                            <tr key={rIndex}>
-                                {value.map((val:any, cIndex:any) => {
-                                    return <td key={cIndex}>
-                                        <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
-                                    </td>;
-                                })}
-                            </tr>
-                        );
-                    })}
+                    {
+                        values.map((value, rIndex) => {
+                            return (
+                                <tr key={rIndex}>
+                                    {value.map((val: any, cIndex:any) => {
+                                        if(cIndex === 2 && (importType === "revolut" || importType === "investment_report")) {
+                                            return (
+                                                <td key={cIndex}>
+                                                    <select value={val} onChange={(e) => onSelectChange(e, rIndex, cIndex)}>
+                                                        {Object.keys(Category).map((key: any) => {
+                                                            let isValueProperty = Number(key) >= 0
+                                                            if (isValueProperty) {
+                                                                return (
+                                                                    <option key={key} value={key}>
+                                                                        {Category[key]}
+                                                                    </option>)
+                                                            }
+                                                        })}
+                                                    </select>
+                                                </td>
+                                            );
+                                        }
+                                        return (
+                                            <td key={cIndex}>
+                                                <input value={val} type="text" onChange={(e) => onChangeInput(e, rIndex, cIndex)}/>
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })
+
+                    }
                 </tbody>
             </table>
         </div>
