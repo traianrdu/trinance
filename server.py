@@ -1,9 +1,11 @@
 import json
 from ast import literal_eval
-
+from decimal import Decimal
+from re import sub
 from flask import Flask, request, make_response, current_app
 from flask_cors import CORS
 from io import BytesIO
+from server import Category, Report
 
 app = Flask(__name__, static_url_path='')
 cors = CORS(app, resources={r'/*': {"origins": '*'}})
@@ -35,6 +37,8 @@ def test2():
             data = request.get_json()
             # load string as json
             data_json = json.loads(data)
+            # checks if data is ok
+            is_data_ok = True
             # read items from dict
             for item in data_json['items']:
                 print(item)
@@ -51,22 +55,43 @@ def test2():
                 amount_ron = item['amountRON']
                 amount_eur = item['amountEUR']
                 amount_usd = item['amountUSD']
-                print(timestamp)
-                print(date)
-                print(category)
-                print(bought_item)
-                print(account)
-                print(currency)
-                print(amount)
-                print(merchant)
-                print(country)
-                print(info)
-                print(amount_ron)
-                print(amount_eur)
-                print(amount_usd)
+
+                # checks if data is empty
+                is_empty, empty_val = is_data_empty(timestamp, data, category, bought_item, account, currency, amount,
+                                                    merchant)
+
+                # exit for if data is empty
+                if is_empty:
+                    is_data_ok = False
+                    break
+                else:  # continue to parse data
+                    category = Category(category).name
+                    amount = Decimal(sub(r'[^\d.]', '', amount))
+                    if amount_ron != "":
+                        amount_ron = Decimal(sub(r'[^\d.]', '', amount_ron))
+                    if amount_eur != "":
+                        amount_eur = Decimal(sub(r'[^\d.]', '', amount_eur))
+                    if amount_usd != "":
+                        amount_usd = Decimal(sub(r'[^\d.]', '', amount_usd))
+
+                    report = Report(timestamp, date, category, item, account, currency, amount, merchant, country, info,
+                                    amount_ron, amount_eur, amount_usd)
+                    print(str(report))
+
+            if is_data_ok:
+                print("ok")
+            else:
+                print("not ok")
         except Exception as e:
             print(f"Couldn't read data {e}")
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
+
+
+def is_data_empty(*args):
+    for arg in args:
+        if arg == "":
+            return True, arg
+    return False, None
 
 
 @app.route("/", methods=['GET', 'POST'])
