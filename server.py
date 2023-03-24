@@ -31,43 +31,39 @@ def test1():
 def test2():
     if request.method == 'POST':
         try:
-            #file = request.form['formData']
-            #print(file.json)
-            #print(file[2])
-            """
-            print(request.data)
-            parsedata = request.data.decode('utf8')
-            data = json.loads(parsedata)
-            s = json.dumps(data, indent=4, sort_keys=True)
-            print(s)
-            """
-            """
-            data = literal_eval(request.data.decode('utf8'))
-            print(data)
-            print('- ' * 20)
-
-            s = json.dumps(data, indent=4, sort_keys=True)
-            print(s)
-            """
             # get json data as string
             data = request.get_json()
             # load string as json
             data_json = json.loads(data)
-            print(type(data_json))
-            print(data_json)
             # read items from dict
-            for i in data_json['items']:
-                print(i)
-            #json_object = request.json.items
-            #print(json_object)
-
-            #json_parser = json.load(json_object)
-            """print(json_object['items'])
-            for i in json_object['items']:
-                print(i)
-                print("---------------")"""
-            #print(request.json)
-            #print(json.dumps(file))
+            for item in data_json['items']:
+                print(item)
+                timestamp = item['timestamp']
+                date = item['date']
+                category = item['category']
+                bought_item = item['item']
+                account = item['account']
+                currency = item['currency']
+                amount = item['amount']
+                merchant = item['merchant']
+                country = item['country']
+                info = item['info']
+                amount_ron = item['amountRON']
+                amount_eur = item['amountEUR']
+                amount_usd = item['amountUSD']
+                print(timestamp)
+                print(date)
+                print(category)
+                print(bought_item)
+                print(account)
+                print(currency)
+                print(amount)
+                print(merchant)
+                print(country)
+                print(info)
+                print(amount_ron)
+                print(amount_eur)
+                print(amount_usd)
         except Exception as e:
             print(f"Couldn't read data {e}")
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
