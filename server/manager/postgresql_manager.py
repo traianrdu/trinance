@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2.extras
 
 
 class PostgresqlManager:
@@ -13,6 +13,12 @@ class PostgresqlManager:
     def insert_row(self):
         """Insert row into db"""
 
+    def insert_multiple_rows(self, data):
+        """Insert row into db"""
+        insert_query = 'INSERT INTO personal_investment ("timestamp", payment_date, category, item, bank_account, ' \
+                       'currency, price_original, merchant, country, info, price_ron, price_eur, price_usd) VALUES %s;'
+        psycopg2.extras.execute_values(self.cursor, insert_query, data, template=None)
+
     def insert_from_csv(self, csv_row):
         """Insert row from csv value"""
         sql = "INSERT INTO personal_investment VALUES (DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
@@ -20,6 +26,11 @@ class PostgresqlManager:
 
     def update_row(self):
         """Update row into db"""
+
+    def close(self):
+        """Closes connection with db"""
+        self.cursor.close()
+        self.conn.close()
 
     def select_all(self):
         sql = '''select * from personal_investment;'''

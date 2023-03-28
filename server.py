@@ -5,7 +5,7 @@ from re import sub
 from flask import Flask, request, make_response, current_app
 from flask_cors import CORS
 from io import BytesIO
-from server import Category, Report
+from server import Category, Report, get_db_info, PostgresqlManager
 
 app = Flask(__name__, static_url_path='')
 cors = CORS(app, resources={r'/*': {"origins": '*'}})
@@ -74,18 +74,23 @@ def test2():
                         amount_eur = Decimal(sub(r'[^\d.]', '', amount_eur))
                     if amount_usd != "":
                         amount_usd = Decimal(sub(r'[^\d.]', '', amount_usd))
-
                     report = Report(timestamp, date, category, bought_item, account, currency, amount, merchant, country, info,
                                     amount_ron, amount_eur, amount_usd)
+                    report.empty_to_none()  # add none to empty data
                     print(report)
-                    items_list.append(report)
+                    items_list.append(report.to_tuple())    # append tuple object
 
             if is_data_ok:
                 # if we have items
                 if len(items_list) > 0:
-                    # go over every item
-                    for item_in_list in items_list:
-                        print("insert data into db")
+                    # get db info based on config and env file
+                    db, db_user, db_pwd, db_host, db_port = get_db_info()
+                    # connect to db
+                    postgresql_manager = PostgresqlManager(db, db_user, db_pwd, db_host, db_port)
+                    # insert rows
+                    postgresql_manager.insert_multiple_rows(items_list)
+                    # close connection
+                    postgresql_manager.close()
                 else:
                     print("we don't have items in the list")
             else:

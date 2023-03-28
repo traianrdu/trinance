@@ -30,6 +30,22 @@ class Report:
         self.amount_usd = amount_usd
 
     def __repr__(self):
-        return F"<Report: {self.timestamp}, {self.date}, {self.category}, {self.item}, {self.account}, {self.currency}," \
-               F" {self.amount}, {self.merchant}, {self.country}, {self.info}, {self.amount_ron}, {self.amount_eur}," \
-               F" {self.amount_usd}> "
+        return F"<Report: {self.timestamp}, {self.date}, {self.category}, {self.item}, {self.account}, " \
+               F"{self.currency}, {self.amount}, {self.merchant}, {self.country}, {self.info}, {self.amount_ron}, " \
+               F"{self.amount_eur}, {self.amount_usd}>"
+
+    def to_tuple(self):
+        """Return object as tuple"""
+        return self.timestamp, self.date, self.category, self.item, self.account, self.currency, self.amount, \
+               self.merchant, self.country, self.info, self.amount_ron, self.amount_eur, self.amount_usd
+
+    def empty_to_none(self):
+        """Overwrite empty value to None"""
+        if self.info == "":
+            self.info = None
+        if self.amount_ron == "":
+            self.amount_ron = None
+        if self.amount_eur == "":
+            self.amount_eur = None
+        if self.amount_usd == "":
+            self.amount_usd = None
