@@ -39,9 +39,10 @@ def test2():
             data_json = json.loads(data)
             # checks if data is ok
             is_data_ok = True
+            # items list
+            items_list = []
             # read items from dict
             for item in data_json['items']:
-                print(item)
                 timestamp = item['timestamp']
                 date = item['date']
                 category = item['category']
@@ -74,12 +75,19 @@ def test2():
                     if amount_usd != "":
                         amount_usd = Decimal(sub(r'[^\d.]', '', amount_usd))
 
-                    report = Report(timestamp, date, category, item, account, currency, amount, merchant, country, info,
+                    report = Report(timestamp, date, category, bought_item, account, currency, amount, merchant, country, info,
                                     amount_ron, amount_eur, amount_usd)
-                    print(str(report))
+                    print(report)
+                    items_list.append(report)
 
             if is_data_ok:
-                print("ok")
+                # if we have items
+                if len(items_list) > 0:
+                    # go over every item
+                    for item_in_list in items_list:
+                        print("insert data into db")
+                else:
+                    print("we don't have items in the list")
             else:
                 print("not ok")
         except Exception as e:

@@ -30,7 +30,6 @@ class Report:
         self.amount_usd = amount_usd
 
     def __repr__(self):
-        return (self.timestamp + ", " + self.date + ", " + self.category + ", " + self.item + ", " + self.account
-                + ", " + self.currency + ", " + str(self.amount) + ", " + self.merchant + ", " + self.country
-                + ", " + self.info + ", " + str(self.amount_ron) + ", " + str(self.amount_eur)
-                + ", " + str(self.amount_usd))
+        return F"<Report: {self.timestamp}, {self.date}, {self.category}, {self.item}, {self.account}, {self.currency}," \
+               F" {self.amount}, {self.merchant}, {self.country}, {self.info}, {self.amount_ron}, {self.amount_eur}," \
+               F" {self.amount_usd}> "
