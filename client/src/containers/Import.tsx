@@ -6,6 +6,8 @@ import {RevolutManager} from "../manager/RevolutManager";
 import {Category} from "../enum/Category";
 import {InvestmentManager} from "../manager/InvestmentManager";
 import {Status} from "../enum/Status";
+import {ReportManager} from "../manager/ReportManager";
+import {DateFormat, dateFormatter} from "../util/DateUtils";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -32,11 +34,9 @@ export default function Import() {
                 header: true,
                 skipEmptyLines: true,
                 complete: function (results) {
-                    const rowsArray: any[] = [];
                     const valuesArray: any[] = [];
                     // Iterating data to get column name and their values
                     results.data.map((d: any) => {
-                        rowsArray.push(Object.keys(d));
                         if (importType === "revolut") {
                             let revolutManager = new RevolutManager(Object.values(d)).getReportManagerObject();
                             valuesArray.push(revolutManager);
@@ -115,6 +115,27 @@ export default function Import() {
         setIsSubmitClick(true);
     }
 
+    /**
+     * Add a new empty row to the table.
+     */
+    const onNewRowBtnClick = () => {
+        // save old values to array
+        const valuesArray: any[] = values;
+        // add default values
+        let timestamp = dateFormatter(new Date(), DateFormat.DayMonthYearHourMinute);
+        let category = Category.miscellaneous.toString();
+        let country = "Romania";
+        // create new report manager
+        let reportManager = new ReportManager(timestamp, "", category, "", "", "",
+            "", "", country, "", "", "", "").getReportManagerObject();
+        // update the array
+        valuesArray.push(reportManager);
+        // set values
+        setTableRows(tableTitle)
+        setValues(valuesArray);
+
+    }
+
     useEffect(() => {
         if (isSubmitClick) {
             setIsSubmitClick(false);
@@ -152,8 +173,15 @@ export default function Import() {
                 <button onClick={submitClick}>IMPORT CSV</button>
             </form>
 
-            <br />
-            <br />
+            <br/>
+            <br/>
+            <div>
+                <button type="button" onClick={onNewRowBtnClick}>
+                    New row
+                </button>
+            </div>
+            <br/>
+            <br/>
             {/* Table */}
             <table>
                 <thead>
@@ -169,7 +197,8 @@ export default function Import() {
                             return (
                                 <tr key={rIndex}>
                                     {value.map((val: any, cIndex:any) => {
-                                        if(cIndex === 2 && (importType === "revolut" || importType === "investment_report")) {
+                                        if(cIndex === 2 && (importType === "revolut" ||
+                                            importType === "investment_report" || importType === "ing")) {
                                             return (
                                                 <td key={cIndex}>
                                                     <select value={val} onChange={(e) => onSelectChange(e, rIndex, cIndex)}>
