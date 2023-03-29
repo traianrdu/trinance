@@ -13,11 +13,22 @@ export function dateFormatter(date: Date, dateFormat: DateFormat): string {
     if (date != null) {
         if (dateFormat === DateFormat.DayMonthYear) {
             formattedDate = addZero(date.getDate()) + "/" + addToMonth(date.getMonth()) + "/" + date.getFullYear();
+            console.log(formattedDate);
+            console.log(date);
+            console.log("------------");
         } else if (dateFormat === DateFormat.DayMonthYearHourMinute) {
             formattedDate = addZero(date.getDate()) + "/" + addToMonth(date.getMonth()) + "/" + date.getFullYear() + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes());
         }
     }
     return formattedDate;
+}
+
+export function formatRevolutDate(date: string): string {
+    let dateArray = date.split("/");
+    let month = dateArray[0];
+    let day = dateArray[1];
+    let year = dateArray[2];
+    return day + "/" + month + "/" +year;
 }
 
 /**

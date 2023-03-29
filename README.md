@@ -10,10 +10,10 @@ Financial data analytics
     * adding new row auto fetches data
 * Parse bank report and add it to db
     * server:
-        * revolut & ing bank report parser (csv/json -> postgresql)
-        * data cleaning
-        * data api
-        * get verified data from client and save it to db
+        * ~~revolut & ing bank report parser (csv/json -> postgresql)~~ &check;
+        * ~~data cleaning~~ &check;
+        * ~~data api~~ &check;
+        * ~~get verified data from client and save it to db~~ &check;
     * client:
         * ~~create editable table~~ &check;
         * view only 10/20 rows in the table
