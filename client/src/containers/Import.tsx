@@ -124,9 +124,11 @@ export default function Import() {
         // add default values
         let timestamp = dateFormatter(new Date(), DateFormat.DayMonthYearHourMinute);
         let category = Category.miscellaneous.toString();
+        let account = "ING";
+        let currency = "RON";
         let country = "Romania";
         // create new report manager
-        let reportManager = new ReportManager(timestamp, "", category, "", "", "",
+        let reportManager = new ReportManager(timestamp, "", category, "", account, currency,
             "", "", country, "", "", "", "").getReportManagerObject();
         // update the array
         valuesArray.push(reportManager);
