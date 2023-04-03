@@ -29,7 +29,7 @@ def test1():
 
 
 # request form data test
-@app.route("/test2", methods=['GET', 'POST', 'OPTIONS'])
+@app.route("/import-csv", methods=['GET', 'POST', 'OPTIONS'])
 def test2():
     if request.method == 'POST':
         try:
@@ -100,11 +100,38 @@ def test2():
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
 
 
+@app.route("/get-dashboard-data", methods=['GET', 'POST', 'OPTIONS'])
+def get_dashboard_data():
+    if request.method == 'GET':
+        # do smth
+        print("abc")
+    return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
+
+
+@app.route("/update-forex-to-ron", methods=['GET', 'POST', 'OPTIONS'])
+def update_forex_to_ron():
+    if request.method == 'GET':
+        print("abcd")
+    return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
+
+
 def is_data_empty(*args):
     for arg in args:
         if arg == "":
             return True, arg
     return False, None
+
+
+@app.route("/import", methods=['GET', 'POST'])
+def import_csv():
+    """Import page"""
+    return app.send_static_file('index.html')
+
+
+@app.route("/dashboard", methods=['GET', 'POST'])
+def dashboard():
+    """Dashboard page"""
+    return app.send_static_file('index.html')
 
 
 @app.route("/", methods=['GET', 'POST'])
