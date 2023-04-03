@@ -102,7 +102,7 @@ export default function Import() {
         setValues(editData)
     };
 
-    const response: Response  = useUploadFormApiPost('http://192.168.0.66:5000/import-csv', sendValues);
+    const response: Response  = useUploadFormApiPost('http://192.168.0.66:5000/import/csv', sendValues);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     }
