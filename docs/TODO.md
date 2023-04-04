@@ -1,10 +1,13 @@
 ### TO DO:
-* create server &check;
-    * ~~add csv to postgresql~~ &check;
-* create client &check;
-    * ~~add sidebar in react + design~~ &check;
 * Bugs:
-    * adding new row auto fetches data
+    * adding new row auto fetches data (or after submit click)
+* server settings:
+  * ~~add csv to postgresql~~ &check;
+  * ~~create blueprint for import~~ &check;
+  * create blueprint for dashboard
+* client settings:
+  * ~~add sidebar in react + design~~ &check;
+  * add stage/prod url config
 * Update eur/usd/etc based on external api or own forex table
 * Parse bank report and add it to db
     * server:
@@ -20,13 +23,14 @@
         * ~~show data as table~~ &check;
         * ~~parse revolut into table~~ &check;
         * ~~parse ing into table~~ (not implementable?)
+        * clear page content after submit
         * new row, delete row buttons
         * table hints (date, account, amount, etc example)
         * view mode, edit, save or reset options
         * buttons design
-* Data tab (view all data in client)
 * Dashboard
     * fetch data from the server (after cleaning)
+* Data tab (view all data in client)
 * Graphs
     * server:
         * table view of expenses & income by month

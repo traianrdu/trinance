@@ -53,8 +53,8 @@ def import_csv_api():
                         amount_eur = Decimal(sub(r'[^\d.]', '', amount_eur))
                     if amount_usd != "":
                         amount_usd = Decimal(sub(r'[^\d.]', '', amount_usd))
-                    report = Report(timestamp, date, category, bought_item, account, currency, amount, merchant, country, info,
-                                    amount_ron, amount_eur, amount_usd)
+                    report = Report(None, timestamp, date, category, bought_item, account, currency, amount, merchant,
+                                    country, info, amount_ron, amount_eur, amount_usd)
                     report.empty_to_none()  # add none to empty data
                     print(report)
                     items_list.append(report.to_tuple())    # append tuple object

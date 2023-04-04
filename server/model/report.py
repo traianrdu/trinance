@@ -13,8 +13,9 @@ class Report:
     -------
     """
 
-    def __init__(self, timestamp, date, category, item, account, currency, amount, merchant, country, info, amount_ron,
+    def __init__(self, report_id, timestamp, date, category, item, account, currency, amount, merchant, country, info, amount_ron,
                  amount_eur, amount_usd):
+        self.report_id = report_id
         self.timestamp = timestamp
         self.date = date
         self.category = category
@@ -30,9 +31,9 @@ class Report:
         self.amount_usd = amount_usd
 
     def __repr__(self):
-        return F"<Report: {self.timestamp}, {self.date}, {self.category}, {self.item}, {self.account}, " \
-               F"{self.currency}, {self.amount}, {self.merchant}, {self.country}, {self.info}, {self.amount_ron}, " \
-               F"{self.amount_eur}, {self.amount_usd}>"
+        return F"<Report: {self.report_id}, {self.timestamp}, {self.date}, {self.category}, {self.item}," \
+               F" {self.account}, {self.currency}, {self.amount}, {self.merchant}, {self.country}, {self.info}, " \
+               F" {self.amount_ron}, {self.amount_eur}, {self.amount_usd}>"
 
     def to_tuple(self):
         """Return object as tuple"""
