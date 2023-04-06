@@ -23,10 +23,10 @@ class PostgresqlManager:
         """Update row into db"""
         pass
 
-    def update_empty_price_RON(self):
+    def update_empty_price_RON(self, values):
         """Update multiple rows with the price in RON"""
         update_query = 'UPDATE personal_investment AS t SET price_ron = e.price_ron FROM (VALUES %s) ' \
-                       'AS e(price_ron, id) WHERE e.id = t.id;'
+                       'AS e(id, price_ron) WHERE e.id = t.id;'
         psycopg2.extras.execute_values(self.cursor, update_query, values, template=None)
 
     def close(self):

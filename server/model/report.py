@@ -1,4 +1,4 @@
-from server import CurrencyManager
+from server import CurrencyManager, Currency
 
 
 class Report:
@@ -43,6 +43,16 @@ class Report:
         return self.timestamp, self.date, self.category, self.item, self.account, self.currency, self.amount, \
             self.merchant, self.country, self.info, self.amount_ron, self.amount_eur, self.amount_usd
 
+    def to_tuple_id_amount(self, case_amount):
+        """Return tuple of id and amount based on selected amount"""
+        match case_amount:
+            case Currency.RON.name:
+                return self.report_id, self.amount_ron
+            case Currency.RON.name:
+                return self.report_id, self.amount_eur
+            case Currency.USD.name:
+                return self.report_id, self.amount_usd
+
     def empty_to_none(self):
         """Overwrite empty value to None"""
         if self.info == "":
@@ -57,15 +67,15 @@ class Report:
     def update_price_for_currency(self, to_currency):
         """Updates price for selected currency"""
         match to_currency:  # switch cases
-            case "RON":
+            case Currency.RON.name:
                 price = self.update_price(self.amount_ron, to_currency)
                 if price != -1:     # checks price
                     self.amount_ron = price     # update price ron
-            case "EUR":
+            case Currency.EUR.name:
                 price = self.update_price(self.amount_eur, to_currency)
                 if price != -1:
                     self.amount_eur = price
-            case "USD":
+            case Currency.USD.name:
                 price = self.update_price(self.amount_usd, to_currency)
                 if price != -1:
                     self.amount_usd = price
