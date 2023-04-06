@@ -29,6 +29,11 @@ class PostgresqlManager:
                        'AS e(id, price_ron) WHERE e.id = t.id;'
         psycopg2.extras.execute_values(self.cursor, update_query, values, template=None)
 
+    def alter_auto_increment(self, value):
+        """Alter auto increment to value"""
+        alter = F'ALTER SEQUENCE personal_investment_id_seq RESTART WITH {value};'
+        self.cursor.execute(alter)
+
     def close(self):
         """Closes connection with db"""
         self.cursor.close()
