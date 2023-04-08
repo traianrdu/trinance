@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from io import BytesIO
-from server import import_api
+from server import import_api, dashboard_api
 
 
 app = Flask(__name__, static_url_path='')
@@ -11,6 +11,7 @@ app.config["DEBUG"] = True
 
 # define blueprints
 app.register_blueprint(import_api, url_prefix="/import")
+app.register_blueprint(dashboard_api, url_prefix="/dashboard")
 
 
 # request file test
@@ -26,21 +27,6 @@ def test1():
             print(file_content)
         except Exception as e:
             print(f"Couldn't upload file {e}")
-    return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
-
-
-@app.route("/get-dashboard-data", methods=['GET', 'POST', 'OPTIONS'])
-def get_dashboard_data():
-    if request.method == 'GET':
-        # do smth
-        print("abc")
-    return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
-
-
-@app.route("/update-forex-to-ron", methods=['GET', 'POST', 'OPTIONS'])
-def update_forex_to_ron():
-    if request.method == 'GET':
-        print("abcd")
     return {"status": 0, "statusText": "good", "data": "good data", "error": "none"}
 
 

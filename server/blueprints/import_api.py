@@ -7,7 +7,7 @@ from re import sub
 import_api = Blueprint("import", __name__)
 
 
-# request form data test
+# request form data
 @import_api.route("/csv", methods=['GET', 'POST', 'OPTIONS'])
 def import_csv_api():
     if request.method == 'POST':
