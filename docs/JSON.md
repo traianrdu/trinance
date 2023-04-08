@@ -24,7 +24,7 @@ Example:
 - list: list by day
 - error: potential error text or "none"
 
-Example:
+Example by day:
 ```JSON
 {
   "status": true,
@@ -33,12 +33,12 @@ Example:
     "currency": "RON",
     "list": [
       {
-        "timestamp": "01/01/2023",
+        "day": "01/01/2023",
         "expenses": "200",
         "income": "300"
       },
       {
-      "timestamp": "02/01/2023",
+      "day": "02/01/2023",
       "expenses": "500",
       "income": "100"
       }
@@ -47,3 +47,5 @@ Example:
   "error": "none"
 }
 ```
+
+implement example by week/month/year

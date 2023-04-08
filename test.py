@@ -1,13 +1,13 @@
-from server import PostgresqlManager, CurrencyManager, get_db_info, Report, Currency
+from server import PostgresqlManager, get_db_info
 from dotenv import load_dotenv
-import os
-import datetime
 
 
 if __name__ == "__main__":
     load_dotenv()
     db, db_user, db_pwd, db_host, db_port = get_db_info()
     postgresql_manager = PostgresqlManager(db, db_user, db_pwd, db_host, db_port)
+
+    """
     empty_price_RON = postgresql_manager.select_empty_price_RON()   # get selected from db
 
     report_list = [Report(*report) for report in empty_price_RON]   # create tuple of object
@@ -21,4 +21,10 @@ if __name__ == "__main__":
     print(small_tuple)
     #postgresql_manager.alter_auto_increment(1)
     #postgresql_manager.update_empty_price_RON(small_tuple)
+    postgresql_manager.close()
+    """
+
+    print(postgresql_manager.select_income_by_day())
+    print(postgresql_manager.select_fixed_expense_by_day())
+    print(postgresql_manager.select_variable_expense_by_day())
     postgresql_manager.close()

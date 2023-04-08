@@ -1,4 +1,5 @@
 import psycopg2.extras
+from ..enum.category import Category
 
 
 class PostgresqlManager:
@@ -48,5 +49,45 @@ class PostgresqlManager:
     def select_empty_price_RON(self):
         """Selects only the rows with empty 'price_ron'"""
         select_sql = 'select * from personal_investment where price_ron is NULL'
+        self.cursor.execute(select_sql)
+        return self.cursor.fetchall()
+
+    def select_income_by_day(self):
+        """Select day, category and sum of income ordered by day"""
+        # income category
+        income_sql = f"WHERE category LIKE '{Category.salary.name}' OR category LIKE '{Category.freelancing.name}'" \
+                     f" OR category LIKE '{Category.extra.name}' OR category LIKE '{Category.person.name}'"
+        # full query
+        select_sql = f"SELECT cast(payment_date as date) as payment_day, category, SUM(price_ron) FROM " \
+                     f"public.personal_investment {income_sql} group by cast(payment_date as date), " \
+                     f"category order by payment_day;"
+        self.cursor.execute(select_sql)
+        return self.cursor.fetchall()
+
+    def select_fixed_expense_by_day(self):
+        """Select day, category and sum of fixed expenses ordered by day"""
+        # fixed cost category
+        income_sql = f"WHERE category LIKE '{Category.home.name}' OR category LIKE '{Category.fuel.name}'" \
+                     f" OR category LIKE '{Category.utilities.name}' OR category LIKE '{Category.groceries.name}'" \
+                     f" OR category LIKE '{Category.subscriptions.name}' OR category LIKE '{Category.phone.name}'" \
+                     f" OR category LIKE '{Category.donations.name}' OR category LIKE '{Category.sport.name}'"
+        # full query
+        select_sql = f"SELECT cast(payment_date as date) as payment_day, category, SUM(price_ron) FROM " \
+                     f"public.personal_investment {income_sql} group by cast(payment_date as date), " \
+                     f"category order by payment_day;"
+        self.cursor.execute(select_sql)
+        return self.cursor.fetchall()
+
+    def select_variable_expense_by_day(self):
+        """Select day, category and sum of variable expenses ordered by day"""
+        # variable cost category
+        income_sql = f"WHERE category LIKE '{Category.shopping.name}' OR category LIKE '{Category.entertainment.name}'" \
+                     f" OR category LIKE '{Category.holiday.name}' OR category LIKE '{Category.gifts.name}'" \
+                     f" OR category LIKE '{Category.restaurant.name}' OR category LIKE '{Category.friends.name}'" \
+                     f" OR category LIKE '{Category.parking.name}' OR category LIKE '{Category.miscellaneous.name}'"
+        # full query
+        select_sql = f"SELECT cast(payment_date as date) as payment_day, category, SUM(price_ron) FROM " \
+                     f"public.personal_investment {income_sql} group by cast(payment_date as date), " \
+                     f"category order by payment_day;"
         self.cursor.execute(select_sql)
         return self.cursor.fetchall()
