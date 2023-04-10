@@ -24,7 +24,10 @@ if __name__ == "__main__":
     postgresql_manager.close()
     """
 
+    """
     print(postgresql_manager.select_income_by_day())
     print(postgresql_manager.select_fixed_expense_by_day())
     print(postgresql_manager.select_variable_expense_by_day())
+    """
+    print(postgresql_manager.select_income_fixed_variable())
     postgresql_manager.close()
