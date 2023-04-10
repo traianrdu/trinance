@@ -70,6 +70,7 @@ class PostgresqlManager:
         # full query
         select_sql = f"SELECT cast(payment_date as date) as payment_day, " \
                      f"SUM(CASE WHEN {income_sql} THEN price_ron ELSE 0 END) income, " \
+                     f"SUM(CASE WHEN {fixed_sql} OR {variable_sql} THEN price_ron ELSE 0 END) expenses, " \
                      f"SUM(CASE WHEN {fixed_sql} THEN price_ron ELSE 0 END) fixed, " \
                      f"SUM(CASE WHEN {variable_sql} THEN price_ron ELSE 0 END) variable " \
                      f"FROM public.personal_investment group by cast(payment_date as date) order by payment_day;"

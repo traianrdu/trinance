@@ -34,13 +34,17 @@ Example by day:
     "list": [
       {
         "day": "01/01/2023",
+        "income": "300",
         "expenses": "200",
-        "income": "300"
+        "fixed": "50",
+        "variable": "150"
       },
       {
-      "day": "02/01/2023",
-      "expenses": "500",
-      "income": "100"
+        "day": "02/01/2023", 
+        "income": "100",
+        "expenses": "450",
+        "fixed": "150",
+        "variable": "300"
       }
     ]
   },
