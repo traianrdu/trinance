@@ -1,5 +1,10 @@
-from server import PostgresqlManager, get_db_info
+from server import PostgresqlManager, get_db_info, Financial, Report
 from dotenv import load_dotenv
+import json
+
+
+def obj_dict(obj):
+    return obj.__dict__
 
 
 if __name__ == "__main__":
@@ -29,5 +34,8 @@ if __name__ == "__main__":
     print(postgresql_manager.select_fixed_expense_by_day())
     print(postgresql_manager.select_variable_expense_by_day())
     """
-    print(postgresql_manager.select_income_fixed_variable())
+    fl = postgresql_manager.select_income_expenses_fixed_variable()
+    financial_list = [Financial(*fina) for fina in fl]
+    print(financial_list)
+    print(json.dumps([obj.__dict__ for obj in financial_list]))  # create json of objects
     postgresql_manager.close()

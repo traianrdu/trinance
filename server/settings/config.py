@@ -1,7 +1,6 @@
 import os
 
-
-is_stage = True     # stage status
+is_stage = True  # stage status
 
 
 def get_db_info():

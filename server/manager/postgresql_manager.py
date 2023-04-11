@@ -52,7 +52,7 @@ class PostgresqlManager:
         self.cursor.execute(select_sql)
         return self.cursor.fetchall()
 
-    def select_income_fixed_variable(self):
+    def select_income_expenses_fixed_variable(self):
         """Select day, income, fixed expenses and variable expenses ordered by day"""
         # income category
         income_sql = f"category LIKE '{Category.salary.name}' OR category LIKE '{Category.freelancing.name}'" \
