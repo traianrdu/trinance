@@ -30,6 +30,7 @@ Example by day:
   "status": true,
   "statusText": "accepted",
   "data": {
+    "isEmptyPrice": true,
     "currency": "RON",
     "list": [
       {

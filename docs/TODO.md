@@ -4,7 +4,7 @@
 * server settings:
   * ~~add csv to postgresql~~ &check;
   * ~~create blueprint for import~~ &check;
-  * create blueprint for dashboard
+  * ~~create blueprint for dashboard~~ &check;
 * client settings:
   * ~~add sidebar in react + design~~ &check;
   * add stage/prod url config
