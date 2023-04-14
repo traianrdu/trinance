@@ -13,9 +13,6 @@ export function dateFormatter(date: Date, dateFormat: DateFormat): string {
     if (date != null) {
         if (dateFormat === DateFormat.DayMonthYear) {
             formattedDate = addZero(date.getDate()) + "/" + addToMonth(date.getMonth()) + "/" + date.getFullYear();
-            console.log(formattedDate);
-            console.log(date);
-            console.log("------------");
         } else if (dateFormat === DateFormat.DayMonthYearHourMinute) {
             formattedDate = addZero(date.getDate()) + "/" + addToMonth(date.getMonth()) + "/" + date.getFullYear() + " " + addZero(date.getHours()) + ":" + addZero(date.getMinutes());
         }
