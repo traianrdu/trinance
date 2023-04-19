@@ -12,15 +12,15 @@ export type Response = {
 };
 
 // default get request
-export function useApiGet(url: string) {
+export function useApiGet(url: string): Response {
     const [status, setStatus] = useState<Number>(0);
     const [statusText, setStatusText] = useState<String>('');
     const [data, setData] = useState<any>();
     const [error, setError] = useState<any>();
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<string>(Status[Status.init]);
 
     const getAPIData = async () => {
-        setLoading(true);
+        setLoading(Status[Status.loading]);
         try {
             const apiResponse = await fetch(url, {
                 method: 'GET'
@@ -32,10 +32,10 @@ export function useApiGet(url: string) {
         } catch (error) {
             setError(error);
         }
-        setLoading(false)
+        setLoading(Status[Status.loaded]);
     };
 
-    return [status, statusText, data, error, loading, getAPIData] as const;
+    return {status, statusText, data, error, loading, useAPI: getAPIData};
 }
 
 // default post request
