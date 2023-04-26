@@ -13,7 +13,6 @@ import {
     Filler
 } from 'chart.js';
 import {Line} from "react-chartjs-2";
-import zoomPlugin, {zoom} from "chartjs-plugin-zoom";
 
 ChartJS.register(
     CategoryScale,
@@ -23,8 +22,7 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Filler,
-    zoomPlugin
+    Filler
 );
 
 export default function Dashboard() {
@@ -39,30 +37,16 @@ export default function Dashboard() {
 
     // graph options
     const options = {
-        maintainAspectRatio: false,
         responsive: true,
+        interaction: {
+            mode: 'index' as const,
+            intersect: false,
+        },
+        stacked: false,
         plugins: {
-            legend: {
-                position: 'top' as const,
-            },
             title: {
                 display: true,
                 text: 'Income-Expenses',
-            },
-            zoom: {
-                pan: {
-                    enabled: true,
-                    threshold: 10,
-                },
-                zoom: {
-                    wheel: {
-                        enabled: true, // SET SCROOL ZOOM TO TRUE
-                        speed: 0.1,
-                    },
-                    pinch: {
-                        enabled: true,
-                    },
-                },
             },
         },
     };
