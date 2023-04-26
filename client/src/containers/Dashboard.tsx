@@ -2,25 +2,29 @@ import React, {useEffect, useState} from 'react';
 import {Response, useApiGet} from "../hooks/UseApi";
 import {Status} from "../enum/Status";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
 } from 'chart.js';
 import {Line} from "react-chartjs-2";
+import zoomPlugin, {zoom} from "chartjs-plugin-zoom";
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler,
+    zoomPlugin
 );
 
 export default function Dashboard() {
@@ -35,53 +39,54 @@ export default function Dashboard() {
 
     // graph options
     const options = {
+        maintainAspectRatio: false,
         responsive: true,
-        interaction: {
-            mode: 'index' as const,
-            intersect: false,
-        },
-        stacked: false,
         plugins: {
+            legend: {
+                position: 'top' as const,
+            },
             title: {
                 display: true,
                 text: 'Income-Expenses',
             },
-        },
-        scales: {
-            y: {
-                type: 'linear' as const,
-                display: true,
-                position: 'left' as const,
-            },
-            y1: {
-                type: 'linear' as const,
-                display: true,
-                position: 'right' as const,
-                grid: {
-                    drawOnChartArea: false,
+            zoom: {
+                pan: {
+                    enabled: true,
+                    threshold: 10,
+                },
+                zoom: {
+                    wheel: {
+                        enabled: true, // SET SCROOL ZOOM TO TRUE
+                        speed: 0.1,
+                    },
+                    pinch: {
+                        enabled: true,
+                    },
                 },
             },
         },
     };
 
     // set graph data
-    const [graphData, setGraphData] = useState({
-        dateList,
+    const graphData = {
+        labels: dateList,
         datasets: [
             {
                 label: "income",
                 data: incomeList,
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
             },
             {
                 label: "expenses",
                 data: expensesList,
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                fill: true,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
         ],
-    });
+    };
 
     const response: Response  = useApiGet('http://192.168.0.66:5000/dashboard/get-dashboard-data');
 
@@ -137,7 +142,7 @@ export default function Dashboard() {
     return (
         <div className='dashboard'>
             <h1>Welcome to the main Dashboard</h1>
-            <Line redraw={true} options={options} data={graphData}/>
+            <Line redraw={true} data={graphData} options={options}/>
         </div>
   );
 }
