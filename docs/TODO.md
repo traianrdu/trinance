@@ -8,7 +8,7 @@
 * client settings:
   * ~~add sidebar in react + design~~ &check;
   * add stage/prod url config
-* Update eur/usd/etc based on external api or own forex table
+* Update eur/usd based on external api or own forex table
 * Parse bank report and add it to db
     * server:
         * ~~revolut & ing bank report parser (csv/json -> postgresql)~~ &check;
@@ -29,14 +29,18 @@
         * view mode, edit, save or reset options
         * buttons design
 * Dashboard
-    * fetch data from the server (after cleaning)
-* Data tab (view all data in client)
+    * ~~fetch data from the server (after cleaning)~~ &check;
+    * view of expenses & income by day from current month
+* Table
+    * view data as table (as excel table)
 * Graphs
     * server:
-        * table view of expenses & income by month
+        * expenses & income by month
         * total expense by year
         * algebraic mean
         * most transactions partner
+        * return all data if needed
     * client:
         * create graphs tab
         * create graphs from server query
+        * show data by day
