@@ -34,9 +34,13 @@ export default function Dashboard() {
     const [dateList, setDateList] = useState<any[]>([]);    // list of timestamps
     const [incomeList, setIncomeList] = useState<any[]>([]);    // income list
     const [expensesList, setExpensesList] = useState<any[]>([]);    // expenses list
+    const [fixedList, setFixedList] = useState<any[]>([]);    // fixed expenses list
+    const [variableList, setVariableList] = useState<any[]>([]);    // variable expenses list
     const currentDate = new Date();
-    const currentMonth = "month=" + currentDate.getMonth();
-    const currentYear = "year=" + currentDate.getFullYear();
+    const currentMonth = "month=7";
+    const currentYear = "year=2022";
+    //const currentMonth = "month=" + currentDate.getMonth();
+    //const currentYear = "year=" + currentDate.getFullYear();
 
     // graph options
     const options = {
@@ -63,15 +67,29 @@ export default function Dashboard() {
                 label: "income",
                 data: incomeList,
                 fill: true,
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                borderColor: '#35A2EB',
+                backgroundColor: '#35A2EB80',
             },
             {
                 label: "expenses",
                 data: expensesList,
                 fill: true,
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: '#E12901',
+                backgroundColor: '#E1290180',
+            },
+            {
+                label: "fixed",
+                data: fixedList,
+                fill: true,
+                borderColor: '#FF1A8C',
+                backgroundColor: '#FF1A8C80',
+            },
+            {
+                label: "variable",
+                data: variableList,
+                fill: true,
+                borderColor: '#C653C6',
+                backgroundColor: '#C653C680',
             },
         ],
     };
@@ -108,12 +126,16 @@ export default function Dashboard() {
                     let date: any[] = [];
                     let income: any[] = [];
                     let expenses: any[] = [];
+                    let fixed: any[] = [];
+                    let variable: any[] = [];
                     // parse data list into sublist
                     for (let index = 0; index < parsedJsonDataList.length; index ++) {
                         // update arrays with data
                         date.push(parsedJsonDataList[index].date);
                         income.push(parsedJsonDataList[index].income);
                         expenses.push(parsedJsonDataList[index].expenses);
+                        fixed.push(parsedJsonDataList[index].fixed);
+                        variable.push(parsedJsonDataList[index].variable)
                     }
                     // set list of dates
                     setDateList(date);
@@ -121,6 +143,10 @@ export default function Dashboard() {
                     setIncomeList(income);
                     // set list of expenses
                     setExpensesList(expenses);
+                    // set list of fixed expenses
+                    setFixedList(fixed);
+                    // set list of variable expenses
+                    setVariableList(variable);
                     //setGraphData();
                 }
             }
