@@ -30,7 +30,7 @@
         * buttons design
 * Dashboard
     * ~~fetch data from the server (after cleaning)~~ &check;
-    * view of expenses & income by day from current month
+    * ~~view of expenses & income by day from current month~~ &check;
 * Table
     * view data as table (as excel table)
 * Graphs

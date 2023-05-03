@@ -3,6 +3,20 @@ from ..enum.category import Category
 
 
 class PostgresqlManager:
+    # income category
+    income_sql = f"category LIKE '{Category.salary.name}' OR category LIKE '{Category.freelancing.name}'" \
+                 f" OR category LIKE '{Category.extra.name}' OR category LIKE '{Category.person.name}'"
+    # fixed cost category
+    fixed_sql = f"category LIKE '{Category.home.name}' OR category LIKE '{Category.fuel.name}'" \
+                f" OR category LIKE '{Category.utilities.name}' OR category LIKE '{Category.groceries.name}'" \
+                f" OR category LIKE '{Category.subscriptions.name}' OR category LIKE '{Category.phone.name}'" \
+                f" OR category LIKE '{Category.donations.name}' OR category LIKE '{Category.sport.name}'"
+    # variable cost category
+    variable_sql = f"category LIKE '{Category.shopping.name}' OR category LIKE '{Category.entertainment.name}'" \
+                   f" OR category LIKE '{Category.holiday.name}' OR category LIKE '{Category.gifts.name}'" \
+                   f" OR category LIKE '{Category.restaurant.name}' OR category LIKE '{Category.friends.name}'" \
+                   f" OR category LIKE '{Category.parking.name}' OR category LIKE '{Category.miscellaneous.name}'"
+
     def __init__(self, database, user, password, host, port):
         self.conn = psycopg2.connect(database=database,
                                      user=user, password=password,
@@ -54,26 +68,26 @@ class PostgresqlManager:
 
     def select_income_expenses_fixed_variable(self):
         """Select day, income, fixed expenses and variable expenses ordered by day"""
-        # income category
-        income_sql = f"category LIKE '{Category.salary.name}' OR category LIKE '{Category.freelancing.name}'" \
-                     f" OR category LIKE '{Category.extra.name}' OR category LIKE '{Category.person.name}'"
-        # fixed cost category
-        fixed_sql = f"category LIKE '{Category.home.name}' OR category LIKE '{Category.fuel.name}'" \
-                    f" OR category LIKE '{Category.utilities.name}' OR category LIKE '{Category.groceries.name}'" \
-                    f" OR category LIKE '{Category.subscriptions.name}' OR category LIKE '{Category.phone.name}'" \
-                    f" OR category LIKE '{Category.donations.name}' OR category LIKE '{Category.sport.name}'"
-        # variable cost category
-        variable_sql = f"category LIKE '{Category.shopping.name}' OR category LIKE '{Category.entertainment.name}'" \
-                       f" OR category LIKE '{Category.holiday.name}' OR category LIKE '{Category.gifts.name}'" \
-                       f" OR category LIKE '{Category.restaurant.name}' OR category LIKE '{Category.friends.name}'" \
-                       f" OR category LIKE '{Category.parking.name}' OR category LIKE '{Category.miscellaneous.name}'"
         # full query
         select_sql = f"SELECT cast(payment_date as date) as payment_day, " \
-                     f"SUM(CASE WHEN {income_sql} THEN price_ron ELSE 0 END) income, " \
-                     f"SUM(CASE WHEN {fixed_sql} OR {variable_sql} THEN price_ron ELSE 0 END) expenses, " \
-                     f"SUM(CASE WHEN {fixed_sql} THEN price_ron ELSE 0 END) fixed, " \
-                     f"SUM(CASE WHEN {variable_sql} THEN price_ron ELSE 0 END) variable " \
+                     f"SUM(CASE WHEN {self.income_sql} THEN price_ron ELSE 0 END) income, " \
+                     f"SUM(CASE WHEN {self.fixed_sql} OR {self.variable_sql} THEN price_ron ELSE 0 END) expenses, " \
+                     f"SUM(CASE WHEN {self.fixed_sql} THEN price_ron ELSE 0 END) fixed, " \
+                     f"SUM(CASE WHEN {self.variable_sql} THEN price_ron ELSE 0 END) variable " \
                      f"FROM public.personal_investment group by cast(payment_date as date) order by payment_day;"
+        self.cursor.execute(select_sql)
+        return self.cursor.fetchall()
+
+    def select_income_expenses_fixed_variable_from_month(self, month, year):
+        # full query
+        select_sql = f"SELECT cast(payment_date as date) as payment_day, " \
+                     f"SUM(CASE WHEN {self.income_sql} THEN price_ron ELSE 0 END) income, " \
+                     f"SUM(CASE WHEN {self.fixed_sql} OR {self.variable_sql} THEN price_ron ELSE 0 END) expenses, " \
+                     f"SUM(CASE WHEN {self.fixed_sql} THEN price_ron ELSE 0 END) fixed, " \
+                     f"SUM(CASE WHEN {self.variable_sql} THEN price_ron ELSE 0 END) variable " \
+                     f"FROM public.personal_investment " \
+                     f"WHERE EXTRACT(MONTH FROM payment_date) = {month} AND EXTRACT(YEAR FROM payment_date) = {year} " \
+                     f"group by cast(payment_date as date) order by payment_day;"
         self.cursor.execute(select_sql)
         return self.cursor.fetchall()
 
@@ -93,9 +107,9 @@ class PostgresqlManager:
         """Select day, category and sum of fixed expenses ordered by day"""
         # fixed cost category
         fixed_sql = f"WHERE category LIKE '{Category.home.name}' OR category LIKE '{Category.fuel.name}'" \
-                     f" OR category LIKE '{Category.utilities.name}' OR category LIKE '{Category.groceries.name}'" \
-                     f" OR category LIKE '{Category.subscriptions.name}' OR category LIKE '{Category.phone.name}'" \
-                     f" OR category LIKE '{Category.donations.name}' OR category LIKE '{Category.sport.name}'"
+                    f" OR category LIKE '{Category.utilities.name}' OR category LIKE '{Category.groceries.name}'" \
+                    f" OR category LIKE '{Category.subscriptions.name}' OR category LIKE '{Category.phone.name}'" \
+                    f" OR category LIKE '{Category.donations.name}' OR category LIKE '{Category.sport.name}'"
         # full query
         select_sql = f"SELECT cast(payment_date as date) as payment_day, SUM(price_ron) FROM " \
                      f"public.personal_investment {fixed_sql} group by cast(payment_date as date) " \
@@ -107,9 +121,9 @@ class PostgresqlManager:
         """Select day, category and sum of variable expenses ordered by day"""
         # variable cost category
         variable_sql = f"WHERE category LIKE '{Category.shopping.name}' OR category LIKE '{Category.entertainment.name}'" \
-                     f" OR category LIKE '{Category.holiday.name}' OR category LIKE '{Category.gifts.name}'" \
-                     f" OR category LIKE '{Category.restaurant.name}' OR category LIKE '{Category.friends.name}'" \
-                     f" OR category LIKE '{Category.parking.name}' OR category LIKE '{Category.miscellaneous.name}'"
+                       f" OR category LIKE '{Category.holiday.name}' OR category LIKE '{Category.gifts.name}'" \
+                       f" OR category LIKE '{Category.restaurant.name}' OR category LIKE '{Category.friends.name}'" \
+                       f" OR category LIKE '{Category.parking.name}' OR category LIKE '{Category.miscellaneous.name}'"
         # full query
         select_sql = f"SELECT cast(payment_date as date) as payment_day, SUM(price_ron) FROM " \
                      f"public.personal_investment {variable_sql} group by cast(payment_date as date) " \

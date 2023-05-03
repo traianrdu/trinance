@@ -38,6 +38,36 @@ export function useApiGet(url: string): Response {
     return {status, statusText, data, error, loading, useAPI: getAPIData};
 }
 
+// get request with args
+export function useApiGetArgs(url: string, ...args: string[]): Response {
+    const [status, setStatus] = useState<Number>(0);
+    const [statusText, setStatusText] = useState<String>('');
+    const [data, setData] = useState<any>();
+    const [error, setError] = useState<any>();
+    const [loading, setLoading] = useState<string>(Status[Status.init]);
+    let newUrl = url + "?";
+    for (const arg of args) {
+        newUrl += arg + "&";
+    }
+    const getAPIData = async () => {
+        setLoading(Status[Status.loading]);
+        try {
+            const apiResponse = await fetch(newUrl, {
+                method: 'GET'
+            });
+            const json = await apiResponse.json();
+            setStatus(apiResponse.status);
+            setStatusText(apiResponse.statusText);
+            setData(json);
+        } catch (error) {
+            setError(error);
+        }
+        setLoading(Status[Status.loaded]);
+    };
+
+    return {status, statusText, data, error, loading, useAPI: getAPIData};
+}
+
 // default post request
 export function useApiPost(url: string, postData = {}): Response {
     const [status, setStatus] = useState<Number>(0);

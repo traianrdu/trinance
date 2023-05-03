@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Response, useApiGet} from "../hooks/UseApi";
+import {Response, useApiGet, useApiGetArgs} from "../hooks/UseApi";
 import {Status} from "../enum/Status";
 import {
     Chart as ChartJS,
@@ -34,9 +34,13 @@ export default function Dashboard() {
     const [dateList, setDateList] = useState<any[]>([]);    // list of timestamps
     const [incomeList, setIncomeList] = useState<any[]>([]);    // income list
     const [expensesList, setExpensesList] = useState<any[]>([]);    // expenses list
+    const currentDate = new Date();
+    const currentMonth = "month=" + currentDate.getMonth();
+    const currentYear = "year=" + currentDate.getFullYear();
 
     // graph options
     const options = {
+        tension: 0.4,
         responsive: true,
         interaction: {
             mode: 'index' as const,
@@ -72,7 +76,7 @@ export default function Dashboard() {
         ],
     };
 
-    const response: Response  = useApiGet('http://192.168.0.66:5000/dashboard/get-dashboard-data');
+    const response: Response  = useApiGetArgs('http://192.168.0.66:5000/dashboard/get-dashboard-data', currentMonth, currentYear);
 
     useEffect(() => {
         if (!isLoadedDashboard) {
