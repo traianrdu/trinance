@@ -41,6 +41,7 @@ export default function Dashboard() {
     const currentYear = "year=2022";
     //const currentMonth = "month=" + currentDate.getMonth();
     //const currentYear = "year=" + currentDate.getFullYear();
+    const [isDataUpdate, setIsDataUpdate] = useState(false);
 
     // graph options
     const options = {
@@ -60,7 +61,7 @@ export default function Dashboard() {
     };
 
     // set graph data
-    const graphData = {
+    const [graphData, setGraphData] = useState({
         labels: dateList,
         datasets: [
             {
@@ -92,7 +93,43 @@ export default function Dashboard() {
                 backgroundColor: '#C653C680',
             },
         ],
-    };
+    });
+
+    function getGraphData() {
+        return {
+        labels: dateList,
+        datasets: [
+            {
+                label: "income",
+                data: incomeList,
+                fill: true,
+                borderColor: '#35A2EB',
+                backgroundColor: '#35A2EB80',
+            },
+            {
+                label: "expenses",
+                data: expensesList,
+                fill: true,
+                borderColor: '#E12901',
+                backgroundColor: '#E1290180',
+            },
+            {
+                label: "fixed",
+                data: fixedList,
+                fill: true,
+                borderColor: '#FF1A8C',
+                backgroundColor: '#FF1A8C80',
+            },
+            {
+                label: "variable",
+                data: variableList,
+                fill: true,
+                borderColor: '#C653C6',
+                backgroundColor: '#C653C680',
+            },
+        ],
+    }
+    }
 
     const response: Response  = useApiGetArgs('http://192.168.0.66:5000/dashboard/get-dashboard-data', currentMonth, currentYear);
 
@@ -147,16 +184,23 @@ export default function Dashboard() {
                     setFixedList(fixed);
                     // set list of variable expenses
                     setVariableList(variable);
-                    //setGraphData();
+                    //setGraphData(getGraphData());
+                    setIsDataUpdate(true);
                 }
             }
         }
+
+        if (isDataUpdate) {
+            setGraphData(getGraphData());
+            setIsDataUpdate(false);
+        }
+
     }, [response]);
 
     return (
         <div className='dashboard'>
             <h1>Welcome to the main Dashboard</h1>
-            <Line redraw={true} data={graphData} options={options}/>
+            <Line key={JSON.stringify(graphData)} data={graphData} redraw options={options} />
         </div>
   );
 }

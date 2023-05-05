@@ -53,7 +53,7 @@ def get_dashboard_data():
                 is_empty_price = True
             # create list json of objects
             data_list = json.dumps([obj.__dict__ for obj in [Financial(*financial) for financial in
-                                                             postgresql_manager.select_income_expenses_fixed_variable_from_month(month, year)]])
+                                    postgresql_manager.select_income_expenses_fixed_variable_from_month(month, year)]])
             postgresql_manager.close()  # close db connection
             data_json = {"isEmptyPrice": is_empty_price, "currency": "RON", "list": data_list}  # create data json
             # create json response
