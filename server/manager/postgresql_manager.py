@@ -79,6 +79,7 @@ class PostgresqlManager:
         return self.cursor.fetchall()
 
     def select_income_expenses_fixed_variable_from_month(self, month, year):
+        """Select all days from one month"""
         # full query
         select_sql = f"SELECT cast(payment_date as date) as payment_day, " \
                      f"SUM(CASE WHEN {self.income_sql} THEN price_ron ELSE 0 END) income, " \
@@ -88,6 +89,15 @@ class PostgresqlManager:
                      f"FROM public.personal_investment " \
                      f"WHERE EXTRACT(MONTH FROM payment_date) = {month} AND EXTRACT(YEAR FROM payment_date) = {year} " \
                      f"group by cast(payment_date as date) order by payment_day;"
+        self.cursor.execute(select_sql)
+        return self.cursor.fetchall()
+
+    def select_income_expenses_fixed_variable_from_year(self, year):
+        """Select all months from one year"""
+        # full query
+        select_sql = f"SELECT date_trunc('month', payment_date) AS txn_month, category," \
+                     f" sum(price_ron) as monthly_sum FROM public.personal_investment " \
+                     f"WHERE EXTRACT(YEAR FROM payment_date)={year} group by txn_month, category order by txn_month;"
         self.cursor.execute(select_sql)
         return self.cursor.fetchall()
 

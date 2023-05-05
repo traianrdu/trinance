@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from io import BytesIO
-from server import import_api, dashboard_api
+from server import import_api, dashboard_api, tableview_api
 
 
 app = Flask(__name__, static_url_path='')
@@ -12,6 +12,7 @@ app.config["DEBUG"] = True
 # define blueprints
 app.register_blueprint(import_api, url_prefix="/import")
 app.register_blueprint(dashboard_api, url_prefix="/dashboard")
+app.register_blueprint(tableview_api, url_prefix="/tableview")
 
 
 # request file test
@@ -33,6 +34,12 @@ def test1():
 @app.route("/import", methods=['GET', 'POST'])
 def import_csv():
     """Import page"""
+    return app.send_static_file('index.html')
+
+
+@app.route("/tableview", methods=['GET', 'POST'])
+def tableview():
+    """Tableview page"""
     return app.send_static_file('index.html')
 
 
