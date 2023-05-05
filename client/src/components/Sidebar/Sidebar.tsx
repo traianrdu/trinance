@@ -5,6 +5,7 @@ import {RxDashboard} from 'react-icons/rx';
 import {IconContext} from 'react-icons';
 import {AiOutlineHome} from 'react-icons/ai';
 import {BiImport} from 'react-icons/bi';
+import {BsTable} from "react-icons/bs";
 
 const classNameFunc = ({ isActive } : { isActive:any }) => (isActive ? "Sidebar-button" : "Sidebar-button"); // either is active or not, it will show the same css
 
@@ -19,6 +20,10 @@ export default function Sidebar() {
                 <NavLink className={classNameFunc} to='/dashboard'>
                     <RxDashboard />
                     <span className={"Sidebar-span"}>Dashboard</span>
+                </NavLink>
+                <NavLink className={classNameFunc} to='/tableview'>
+                    <BsTable />
+                    <span className={"Sidebar-span"}>Table</span>
                 </NavLink>
                 <NavLink className={classNameFunc} to='/import'>
                     <BiImport />

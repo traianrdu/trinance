@@ -1,4 +1,4 @@
-import {DateFormat, dateFormatter} from "../util/DateUtils";
+import {DateFormat, dateFormatter, formatRevolutDate} from "../hooks/DateUtils";
 import {ReportManager} from "./ReportManager";
 import {Category} from "../enum/Category";
 
@@ -6,7 +6,7 @@ export class RevolutManager extends ReportManager{
 
     public constructor(data: any) {
         let timestamp = dateFormatter(new Date(), DateFormat.DayMonthYearHourMinute);
-        let date = dateFormatter(new Date(data[2]), DateFormat.DayMonthYear);
+        let date = dateFormatter(new Date(formatRevolutDate(data[2])), DateFormat.DayMonthYear);
         let category = Category.miscellaneous.toString();
         let item = "";
         let account = RevolutManager.accountFormat("Revolut", data[7]);

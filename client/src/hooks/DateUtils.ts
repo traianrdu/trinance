@@ -20,6 +20,14 @@ export function dateFormatter(date: Date, dateFormat: DateFormat): string {
     return formattedDate;
 }
 
+export function formatRevolutDate(date: string): string {
+    let dateArray = date.split("/");
+    let month = dateArray[0];
+    let day = dateArray[1];
+    let year = dateArray[2];
+    return day + "/" + month + "/" +year;
+}
+
 /**
  * Add +1 to month if it is <10.
  * @param month month number

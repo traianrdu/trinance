@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {Response, useUploadFormApiPost} from "../hooks/useApiHook";
+import {Response, useUploadFormApiPost} from "../hooks/UseApi";
 import RadioButton from "../components/RadioButton";
 import Papa from "papaparse";
 import {RevolutManager} from "../manager/RevolutManager";
@@ -7,7 +7,7 @@ import {Category} from "../enum/Category";
 import {InvestmentManager} from "../manager/InvestmentManager";
 import {Status} from "../enum/Status";
 import {ReportManager} from "../manager/ReportManager";
-import {DateFormat, dateFormatter} from "../util/DateUtils";
+import {DateFormat, dateFormatter} from "../hooks/DateUtils";
 
 export default function Import() {
     const [file, setFile] = useState<File>();
@@ -102,7 +102,7 @@ export default function Import() {
         setValues(editData)
     };
 
-    const response: Response  = useUploadFormApiPost('http://192.168.0.66:5000/test2', sendValues);
+    const response: Response  = useUploadFormApiPost('http://192.168.0.66:5000/import/csv', sendValues);
     const afterSubmission = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     }
@@ -124,9 +124,11 @@ export default function Import() {
         // add default values
         let timestamp = dateFormatter(new Date(), DateFormat.DayMonthYearHourMinute);
         let category = Category.miscellaneous.toString();
+        let account = "ING";
+        let currency = "RON";
         let country = "Romania";
         // create new report manager
-        let reportManager = new ReportManager(timestamp, "", category, "", "", "",
+        let reportManager = new ReportManager(timestamp, "", category, "", account, currency,
             "", "", country, "", "", "", "").getReportManagerObject();
         // update the array
         valuesArray.push(reportManager);
