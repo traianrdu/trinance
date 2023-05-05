@@ -184,7 +184,6 @@ export default function Dashboard() {
                     setFixedList(fixed);
                     // set list of variable expenses
                     setVariableList(variable);
-                    //setGraphData(getGraphData());
                     setIsDataUpdate(true);
                 }
             }
@@ -195,7 +194,7 @@ export default function Dashboard() {
             setIsDataUpdate(false);
         }
 
-    }, [response]);
+    }, [response, isDataUpdate]);
 
     return (
         <div className='dashboard'>
