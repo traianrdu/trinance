@@ -92,8 +92,8 @@ class PostgresqlManager:
         self.cursor.execute(select_sql)
         return self.cursor.fetchall()
 
-    def select_income_expenses_fixed_variable_from_year(self, year):
-        """Select all months from one year"""
+    def select_income_expenses_fixed_variable_from_year_by_product(self, year):
+        """Select all months from one year and print month, category and monthly sum for the particular category"""
         # full query
         select_sql = f"SELECT date_trunc('month', payment_date) AS txn_month, category," \
                      f" sum(price_ron) as monthly_sum FROM public.personal_investment " \

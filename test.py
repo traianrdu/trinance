@@ -43,3 +43,6 @@ if __name__ == "__main__":
     fl = postgresql_manager.select_income_expenses_fixed_variable_from_month(4, 2022)
     financial_list = [Financial(*fina) for fina in fl]
     print(financial_list)
+    ff = postgresql_manager.select_income_expenses_fixed_variable_from_year_by_product(2022)
+    print(ff)
+    postgresql_manager.close()
